@@ -4,11 +4,16 @@ export default function(state$) {
   const vtree$ = state$.map(({ message, count }) => {
     return h('div', [
       h('button', ['fetch']),
-      '' + count
+      '' + count,
+      message
     ]);
   });
+  const request$ = state$.map(({ request }) => {
+    return request;
+  });
   const requests = {
-    DOM: vtree$
+    DOM: vtree$,
+    HTTP: request$
   };
   return requests;
 }
