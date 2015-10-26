@@ -1,5 +1,8 @@
 export default function(responses) {
   const { DOM } = responses;
-  const actions = {};
+  const fetchIssue$ = DOM.select('button').events('click');
+  const actions = {
+    fetchIssue$
+  };
   return actions;
 }
