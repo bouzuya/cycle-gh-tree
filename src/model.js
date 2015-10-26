@@ -1,11 +1,20 @@
 import Rx from 'rx';
 
+function parseIssue(response) {
+  const { html_url, title } = response;
+  return { url: html_url, title };
+}
+
 export default function(actions) {
   const {
     fetchIssue$,
     updateIssue$
   } = actions;
-  const state = { message: 'Hello, world!', count: 0 };
+  const state = {
+    message: 'Hello, world!',
+    count: 0,
+    issues: []
+  };
   const actions$ = Rx.Observable.merge(
     fetchIssue$.map(() => state => {
       state.count += 1;
@@ -18,6 +27,7 @@ export default function(actions) {
       return state;
     }),
     updateIssue$.map(body => state => {
+      state.issues = JSON.parse(body).map(parseIssue);
       state.message = 'fetched!';
       return state;
     })
