@@ -1,0 +1,14 @@
+<!doctype html
+<html
+  @lang ja
+  <head
+    <title
+      gh-tree
+    <link
+      @rel stylesheet
+      @href main.css
+  <body
+    <div
+      @id app
+    <script
+      @src main.js
