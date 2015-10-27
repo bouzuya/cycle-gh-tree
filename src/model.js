@@ -8,7 +8,7 @@ function parseIssue(response) {
 export default function(actions) {
   const {
     fetchIssue$,
-    updateIssue$
+    updateIssues$
   } = actions;
   const state = {
     message: 'Hello, world!',
@@ -31,9 +31,15 @@ export default function(actions) {
       state.requests.push(request); // FIXME
       return state;
     }),
-    updateIssue$.map(body => state => {
+    updateIssues$
+    .map(body => {
+      const json = JSON.parse(body);
+      const issues = json.map(parseIssue);
+      return issues;
+    })
+    .map(issues => state => {
       state.requests.shift(); // FIXME
-      state.issues = JSON.parse(body).map(parseIssue);
+      state.issues = issues;
       state.message = 'fetched!';
       return state;
     })
