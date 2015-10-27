@@ -1,10 +1,5 @@
 import Rx from 'rx';
 
-function parseIssue(response) {
-  const { html_url, title } = response;
-  return { url: html_url, title };
-}
-
 export default function(actions) {
   const {
     fetchIssue$,
@@ -32,12 +27,7 @@ export default function(actions) {
       return state;
     }),
     updateIssues$
-    .map(body => {
-      const json = JSON.parse(body);
-      const issues = json.map(parseIssue);
-      return issues;
-    })
-    .map(issues => state => {
+    .map(({ issues }) => state => {
       state.requests.shift(); // FIXME
       state.issues = issues;
       state.message = 'fetched!';
