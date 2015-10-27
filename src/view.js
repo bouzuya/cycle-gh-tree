@@ -7,9 +7,9 @@ export default function(state$) {
       h('button', ['fetch']),
       '' + count,
       message,
-      h('ul', issues.map(({ url, title }) => {
+      h('ul', issues.map(({ url, title, number }) => {
         return h('li', [
-          h('a', { href: url }, [title])
+          h('a', { href: url }, [`#${number} ${title}`])
         ]);
       }))
     ])

@@ -1,6 +1,6 @@
 function parseIssue(response) {
-  const { html_url, title } = response;
-  return { url: html_url, title };
+  const { html_url, title, number } = response;
+  return { url: html_url, title, number };
 }
 
 export default function({ HTTP }) {
