@@ -2,7 +2,7 @@ import Rx from 'rx';
 
 export default function(actions) {
   const {
-    fetchIssue$,
+    fetchIssues$,
     updateIssues$
   } = actions;
   const state = {
@@ -12,7 +12,7 @@ export default function(actions) {
     requests: []
   };
   const actions$ = Rx.Observable.merge(
-    fetchIssue$
+    fetchIssues$
     .map(() => {
       const baseUrl = 'https://api.github.com';
       const owner = 'bouzuya';
