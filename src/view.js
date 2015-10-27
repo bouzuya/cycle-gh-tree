@@ -1,4 +1,5 @@
 import { h } from '@cycle/dom';
+import Rx from 'rx';
 
 export default function(state$) {
   const vtree$ = state$.map(({ message, count, issues }) => {
@@ -6,18 +7,16 @@ export default function(state$) {
       h('button', ['fetch']),
       '' + count,
       message,
-      h('ul', issues.map(i => {
+      h('ul', issues.map(({ url, title }) => {
         return h('li', [
-          h('a', { href: i.html_url }, [
-            i.title
-          ])
+          h('a', { href: url }, [title])
         ]);
       }))
     ])
   });
-  const request$ = state$.map(({ request }) => {
-    return request;
-  });
+  const request$ = state$.flatMap(({ requests }) => {
+    return Rx.Observable.from(requests);
+  }).filter(i => i);
   const requests = {
     DOM: vtree$,
     HTTP: request$
