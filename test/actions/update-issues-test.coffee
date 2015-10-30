@@ -7,10 +7,12 @@ describe 'actions/update-issues', ->
     @url = 'https://github.com/bouzuya/blog.bouzuya.net/issues/1'
     @title = 'title 1'
     @number = 1
+    @body = 'body 1'
     issues = [
       html_url: @url
       title: @title
       number: @number
+      body: @body
     ]
     response$ = Rx.Observable.just body: JSON.stringify issues
     response$.request =
@@ -25,4 +27,5 @@ describe 'actions/update-issues', ->
         url: @url
         title: @title
         number: @number
+        body: @body
       ]
