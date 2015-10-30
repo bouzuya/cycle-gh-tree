@@ -2,6 +2,7 @@ import Rx from 'rx';
 
 export default function(actions) {
   const {
+    addRepo$,
     fetchIssues$,
     updateIssue$,
     updateRepo$,
@@ -9,10 +10,17 @@ export default function(actions) {
   } = actions;
   const state = {
     issues: [],
+    repos: [],
     repo: null,
     user: null
   };
   const actions$ = Rx.Observable.merge(
+    addRepo$
+    .map(repo => state => {
+      const { user, repo } = state;
+      state.repos.push({ user, repo });
+      return state;
+    }),
     updateIssue$
     .map(issue => state => {
       state.issues.push(issue);
