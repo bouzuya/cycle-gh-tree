@@ -1,6 +1,6 @@
 assert = require 'power-assert'
 Rx = require 'rx'
-updateIssues = require '../../src/actions/update-issues'
+updateIssue = require '../../src/actions/update-issue'
 
 describe 'actions/update-issues', ->
   beforeEach ->
@@ -39,8 +39,8 @@ describe 'actions/update-issues', ->
     @response = { HTTP }
 
   it 'works', ->
-    { updateIssues$ } = updateIssues @response
-    updateIssues$
+    { updateIssue$ } = updateIssue @response
+    updateIssue$
     .take(4)
     .reduce(((a, i) -> a.concat i), [])
     .subscribe (a) ->

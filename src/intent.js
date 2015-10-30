@@ -1,10 +1,10 @@
 import fetchIssues from './actions/fetch-issues';
-import updateIssues from './actions/update-issues';
+import updateIssue from './actions/update-issue';
 
 export default function(responses) {
   const actions = {
     ...fetchIssues(responses),
-    ...updateIssues(responses)
+    ...updateIssue(responses)
   };
   return actions;
 }

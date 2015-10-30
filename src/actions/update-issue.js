@@ -6,7 +6,7 @@ function parseIssue(response) {
 }
 
 export default function({ HTTP }) {
-  const updateIssues$ = HTTP.filter(({ request }) => {
+  const updateIssue$ = HTTP.filter(({ request }) => {
     const pattern = '^https://api.github.com/repos/[^/]+/[^/]+/issues$';
     return request.url.match(new RegExp(pattern));
   })
@@ -16,5 +16,5 @@ export default function({ HTTP }) {
     const issues = json.map(parseIssue);
     return Rx.Observable.from(issues);
   });
-  return { updateIssues$ };
+  return { updateIssue$ };
 }
