@@ -4,28 +4,64 @@ updateIssues = require '../../src/actions/update-issues'
 
 describe 'actions/update-issues', ->
   beforeEach ->
-    @url = 'https://github.com/bouzuya/blog.bouzuya.net/issues/1'
-    @title = 'title 1'
-    @number = 1
-    @body = 'body 1'
-    issues = [
-      html_url: @url
-      title: @title
-      number: @number
-      body: @body
+    issues1 = [
+      html_url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/1'
+      title: 'title 1-1'
+      number: 1
+      body: 'body 1-1'
+    ,
+      html_url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/2'
+      title: 'title 1-2'
+      number: 2
+      body: 'body 1-2'
     ]
-    response$ = Rx.Observable.just body: JSON.stringify issues
-    response$.request =
+    response1$ = Rx.Observable.just body: JSON.stringify issues1
+    response1$.request =
       url: 'https://api.github.com/repos/bouzuya/blog.bouzuya.net/issues'
-    HTTP = Rx.Observable.just response$
+    issues2 = [
+      html_url: 'https://github.com/bouzuya/bouzuya.net/issues/1'
+      title: 'title 2-1'
+      number: 1
+      body: 'body 2-1'
+    ,
+      html_url: 'https://github.com/bouzuya/bouzuya.net/issues/2'
+      title: 'title 2-2'
+      number: 2
+      body: 'body 2-2'
+    ]
+    response2$ = Rx.Observable.just body: JSON.stringify issues2
+    response2$.request =
+      url: 'https://api.github.com/repos/bouzuya/bouzuya.net/issues'
+    HTTP = Rx.Observable.from [
+      response1$
+      response2$
+    ]
     @response = { HTTP }
 
   it 'works', ->
     { updateIssues$ } = updateIssues @response
-    updateIssues$.subscribe (i) =>
-      assert.deepEqual i.issues, [
-        url: @url
-        title: @title
-        number: @number
-        body: @body
+    updateIssues$
+    .take(4)
+    .reduce(((a, i) -> a.concat i), [])
+    .subscribe (a) ->
+      assert.deepEqual a, [
+        url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/1'
+        title: 'title 1-1'
+        number: 1
+        body: 'body 1-1'
+      ,
+        url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/2'
+        title: 'title 1-2'
+        number: 2
+        body: 'body 1-2'
+      ,
+        url: 'https://github.com/bouzuya/bouzuya.net/issues/1'
+        title: 'title 2-1'
+        number: 1
+        body: 'body 2-1'
+      ,
+        url: 'https://github.com/bouzuya/bouzuya.net/issues/2'
+        title: 'title 2-2'
+        number: 2
+        body: 'body 2-2'
       ]
