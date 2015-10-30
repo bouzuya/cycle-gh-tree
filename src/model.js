@@ -3,17 +3,13 @@ import Rx from 'rx';
 export default function(actions) {
   const {
     fetchIssues$,
-    updateIssues$
+    updateIssue$
   } = actions;
-  const state = {
-    issues: [],
-    message: 'Hello, world!'
-  };
+  const state = { issues: [] };
   const actions$ = Rx.Observable.merge(
-    updateIssues$
-    .map(({ issues }) => state => {
-      state.issues = issues;
-      state.message = 'fetched!';
+    updateIssue$
+    .map(issue => state => {
+      state.issues.push(issue);
       return state;
     })
   );

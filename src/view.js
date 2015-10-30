@@ -2,10 +2,9 @@ import { h } from '@cycle/dom';
 import Rx from 'rx';
 
 export default function(state$) {
-  const vtree$ = state$.map(({ message, issues }) => {
+  const vtree$ = state$.map(({ issues }) => {
     return h('div', [
       h('button', ['fetch']),
-      message,
       h('ul', issues.map(({ url, title, number }) => {
         return h('li', [
           h('a', { href: url }, [`#${number} ${title}`])
