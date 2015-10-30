@@ -11,10 +11,20 @@ export default function(actions) {
   const state = {
     issues: [],
     repos: [],
+    request$: null,
     repo: null,
     user: null
   };
   const actions$ = Rx.Observable.merge(
+    fetchIssues$
+    .map(() => state => {
+      state.request$ = Rx.Observable.from(state.repos.map(({ user, repo }) => {
+        const url = `https://api.github.com/repos/${user}/${repo}/issues`;
+        const headers = { 'User-Agent': 'gh-tree' };
+        return { method: 'GET', url, headers };
+      }));
+      return state;
+    }),
     addRepo$
     .map(repo => state => {
       const { user, repo } = state;
@@ -39,19 +49,10 @@ export default function(actions) {
   );
   const state$ = Rx.Observable.just(state)
     .merge(actions$)
-    .scan((state, action) => action(state))
+    .scan((state, action) => {
+      state.request$ = null;
+      return action(state)
+    })
     .share();
-  state$.request$ = fetchIssues$
-  .flatMap(() => {
-    const repos = [
-      { user: 'bouzuya', repo: 'bouzuya.net' },
-      { user: 'bouzuya', repo: 'blog.bouzuya.net' }
-    ];
-    return Rx.Observable.from(repos.map(({ user, repo }) => {
-      const url = `https://api.github.com/repos/${user}/${repo}/issues`;
-      const headers = { 'User-Agent': 'gh-tree' };
-      return { method: 'GET', url, headers };
-    }));
-  });
   return state$;
 }

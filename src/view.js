@@ -2,7 +2,8 @@ import { h } from '@cycle/dom';
 import Rx from 'rx';
 
 export default function(state$) {
-  const vtree$ = state$.map(({ issues, user, repo, repos }) => {
+  const vtree$ = state$
+  .map(({ issues, user, repo, repos }) => {
     return h('div', [
       h('div', [
         h('input.user'),
@@ -22,7 +23,10 @@ export default function(state$) {
       }))
     ])
   });
-  const request$ = state$.request$;
+  const request$ = state$
+  .map(({ request$ }) => request$)
+  .filter(i => i)
+  .flatMap(i => i);
   const requests = {
     DOM: vtree$,
     HTTP: request$
