@@ -11,18 +11,21 @@ export default function(actions) {
   const state = {
     issues: [],
     repos: [],
-    request$: null,
+    requests: [],
     repo: null,
     user: null
   };
   const actions$ = Rx.Observable.merge(
     fetchIssues$
-    .map(() => state => {
-      state.request$ = Rx.Observable.from(state.repos.map(({ user, repo }) => {
+    .map((_, i) => state => {
+      const newRequests = state.repos.map(({ user, repo }, j) => {
+        const reposMaxLength = 10;
+        const id = i * reposMaxLength + j;
         const url = `https://api.github.com/repos/${user}/${repo}/issues`;
         const headers = { 'User-Agent': 'gh-tree' };
-        return { method: 'GET', url, headers };
-      }));
+        return { id, method: 'GET', url, headers };
+      });
+      state.requests = state.requests.concat(newRequests);
       return state;
     }),
     addRepo$
@@ -49,10 +52,7 @@ export default function(actions) {
   );
   const state$ = Rx.Observable.just(state)
     .merge(actions$)
-    .scan((state, action) => {
-      state.request$ = null;
-      return action(state)
-    })
+    .scan((state, action) => action(state))
     .share();
   return state$;
 }

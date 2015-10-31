@@ -24,9 +24,7 @@ export default function(state$) {
     ])
   });
   const request$ = state$
-  .map(({ request$ }) => request$)
-  .filter(i => i)
-  .flatMap(i => i);
+  .flatMap(({ requests }) => Rx.Observable.from(requests));
   const requests = {
     DOM: vtree$,
     HTTP: request$
