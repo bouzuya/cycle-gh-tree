@@ -47,6 +47,9 @@ describe 'drivers/http', ->
         id: 1
         url: 'http://example.com'
       ,
+        # null (should be ignored)
+        null
+      ,
         id: 2
         url: 'http://example.com'
       ]
@@ -63,7 +66,7 @@ describe 'drivers/http', ->
         assert request is @requests[0]
         assert response is @response
         { request, response } = response2
-        assert request is @requests[2]
+        assert request is @requests[3]
         assert response is @response
         done()
       , done
