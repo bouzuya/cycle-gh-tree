@@ -18,6 +18,7 @@
     "browserify": "^11.2.0",
     "coffee-script": "^1.10.0",
     "del": "^2.0.2",
+    "es6-promise": "^3.0.2",
     "gulp": "^3.9.0",
     "gulp-b-html": "^0.2.0",
     "gulp-babel": "^5.2.1",
