@@ -15,9 +15,6 @@ describe 'actions/update-issues', ->
       number: 2
       body: 'body 1-2'
     ]
-    response1$ = Rx.Observable.just body: JSON.stringify issues1
-    response1$.request =
-      url: 'https://api.github.com/repos/bouzuya/blog.bouzuya.net/issues'
     issues2 = [
       html_url: 'https://github.com/bouzuya/bouzuya.net/issues/1'
       title: 'title 2-1'
@@ -29,12 +26,18 @@ describe 'actions/update-issues', ->
       number: 2
       body: 'body 2-2'
     ]
-    response2$ = Rx.Observable.just body: JSON.stringify issues2
-    response2$.request =
-      url: 'https://api.github.com/repos/bouzuya/bouzuya.net/issues'
     HTTP = Rx.Observable.from [
-      response1$
-      response2$
+      request:
+        url: 'https://api.github.com/repos/bouzuya/blog.bouzuya.net/issues'
+      response:
+        json: ->
+          Promise.resolve issues1
+    ,
+      request:
+        url: 'https://api.github.com/repos/bouzuya/bouzuya.net/issues'
+      response:
+        json: ->
+          Promise.resolve issues2
     ]
     @response = { HTTP }
 
