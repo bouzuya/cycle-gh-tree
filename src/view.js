@@ -3,8 +3,15 @@ import Rx from 'rx';
 
 function renderTokenForm(state) {
   return h('div', [
-    h('input.token'),
-    h('button.save-token', ['save token'])
+    h('input.token', { value: state.tokenFormValue }),
+    h('button.save-token', ['save token']),
+    h('span.token', [
+      state.token.replace(/^(.*)(.{4})$/, (_, p1, p2) => {
+        const masked = new Array(p1.length + 1).join('*');
+        const opened = p2;
+        return masked + opened;
+      })
+    ])
   ]);
 }
 
