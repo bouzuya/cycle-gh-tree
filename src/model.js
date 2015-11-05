@@ -2,23 +2,31 @@ import Rx from 'rx';
 
 function initializeToken() {
   return {
-    token: '',
-    tokenFormValue: ''
+    // TODO
+    settings: {
+      token: ''
+    },
+    token: {
+      value: ''
+    }
   };
 }
 
 function updateAndSaveToken(actions) {
-  const { saveToken$, updateToken$ } = actions;
+  const { token } = actions; // namespace
+  const { save$, update$ } = token; // actions
   return Rx.Observable.merge(
-    saveToken$
+    save$
     .map(() => state => {
-      state.token = state.tokenFormValue;
-      state.tokenFormValue = '';
+      const { token } = state;
+      state.settings.token = token.value;
+      token.value = '';
       return state;
     }),
-    updateToken$
-    .map(token => state => {
-      state.tokenFormValue = token;
+    update$
+    .map(value => state => {
+      const { token } = state;
+      token.value = value;
       return state;
     })
   );
