@@ -52,19 +52,27 @@ describe 'actions/update-issue', ->
         title: 'title 1-1'
         number: 1
         body: 'body 1-1'
+        user: 'bouzuya'
+        repo: 'blog.bouzuya.net'
       ,
         url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/2'
         title: 'title 1-2'
         number: 2
         body: 'body 1-2'
+        user: 'bouzuya'
+        repo: 'blog.bouzuya.net'
       ,
         url: 'https://github.com/bouzuya/bouzuya.net/issues/1'
         title: 'title 2-1'
         number: 1
         body: 'body 2-1'
+        user: 'bouzuya'
+        repo: 'bouzuya.net'
       ,
         url: 'https://github.com/bouzuya/bouzuya.net/issues/2'
         title: 'title 2-2'
         number: 2
         body: 'body 2-2'
+        user: 'bouzuya'
+        repo: 'bouzuya.net'
       ]
