@@ -74,7 +74,9 @@ export default function(actions) {
     repos: [],
     requests: [],
     repo: null,
-    user: null
+    user: null,
+    token: '',
+    tokenFormValue: ''
   };
   const reposMaxLength = 10;
   const actions$ = Rx.Observable.merge(
