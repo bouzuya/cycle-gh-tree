@@ -2,7 +2,7 @@ assert = require 'power-assert'
 Rx = require 'rx'
 updateIssue = require '../../src/actions/update-issue'
 
-describe 'actions/update-issues', ->
+describe 'actions/update-issue', ->
   beforeEach ->
     issues1 = [
       html_url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/1'
