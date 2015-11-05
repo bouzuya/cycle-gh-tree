@@ -1,5 +1,22 @@
 import Rx from 'rx';
 
+function updateAndSaveToken(actions) {
+  const { saveToken$, updateToken$ } = actions;
+  return Rx.Observable.merge(
+    saveToken$
+    .map(() => state => {
+      state.token = state.tokenFormValue;
+      state.tokenFormValue = '';
+      return state;
+    }),
+    updateToken$
+    .map(token => state => {
+      state.tokenFormValue = token;
+      return state;
+    })
+  );
+}
+
 function indexOf(issues, issue) {
   const indexes = issues
   .map((i, index) => [i, index])
@@ -83,6 +100,7 @@ export default function(actions) {
       state.repos.push({ user, repo });
       return state;
     }),
+    updateAndSaveToken(actions),
     updateIssue$
     .map(issue => state => {
       state.issues = merge(state.issues, issue);
