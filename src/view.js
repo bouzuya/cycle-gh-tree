@@ -15,11 +15,19 @@ export default function(state$) {
         return h('li', [user, '/', repo]);
       })),
       h('button.fetch', ['fetch']),
-      h('ul', issues.map(({ url, title, number }) => {
+      h('ul', issues.map(({ url, title, number, children }) => {
         return h('li', [
           h('a', { href: url }, [`#${number}`]),
           ' ',
-          title
+          title,
+          children.length === 0 ? null : h('ul', children.map(i => {
+            const { url, title, number } = i;
+            return h('li', [
+              h('a', { href: url }, [`#${number}`]),
+              ' ',
+              title
+            ]);
+          }))
         ]);
       }))
     ])
