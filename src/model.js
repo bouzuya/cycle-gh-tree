@@ -1,5 +1,12 @@
 import Rx from 'rx';
 
+function initializeToken() {
+  return {
+    token: '',
+    tokenFormValue: ''
+  };
+}
+
 function updateAndSaveToken(actions) {
   const { saveToken$, updateToken$ } = actions;
   return Rx.Observable.merge(
@@ -75,8 +82,7 @@ export default function(actions) {
     requests: [],
     repo: null,
     user: null,
-    token: '',
-    tokenFormValue: ''
+    ...initializeToken()
   };
   const reposMaxLength = 10;
   const actions$ = Rx.Observable.merge(
