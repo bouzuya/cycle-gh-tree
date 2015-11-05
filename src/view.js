@@ -1,9 +1,17 @@
 import { h } from '@cycle/dom';
 import Rx from 'rx';
 
+function renderTokenForm(state) {
+  return h('div', [
+    h('input.token'),
+    h('button.save-token', ['save token'])
+  ]);
+}
+
 export default function(state$) {
   const vtree$ = state$
-  .map(({ issues, user, repo, repos }) => {
+  .map(state => {
+    const { issues, user, repo, repos } = state;
     return h('div', [
       h('div', [
         h('input.user'),
@@ -11,6 +19,7 @@ export default function(state$) {
         h('input.repo'),
         h('button.add', ['add'])
       ]),
+      renderTokenForm(state),
       h('ul', repos.map(({ user, repo }) => {
         return h('li', [user, '/', repo]);
       })),
