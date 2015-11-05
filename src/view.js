@@ -7,6 +7,7 @@ export default function(state$) {
     return h('div', [
       h('div', [
         h('input.user'),
+        '/',
         h('input.repo'),
         h('button.add', ['add'])
       ]),
