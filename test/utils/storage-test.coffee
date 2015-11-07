@@ -38,3 +38,8 @@ describe 'utils/storage', ->
     storage.setItem('baz', 123)
     storage.clear()
     assert storage.length is 0
+
+    storage = new Storage foo: 'bar'
+    assert storage.length is 1
+    assert storage.key(0) is 'foo'
+    assert storage.getItem('foo') is 'bar'

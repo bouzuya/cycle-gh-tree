@@ -9,9 +9,9 @@
 // };
 
 export class Storage {
-  constructor() {
-    this.keys = [];
-    this.storage = {};
+  constructor(initialState = {}) {
+    this.keys = Object.keys(initialState);
+    this.storage = { ...initialState };
   }
 
   get length() {
