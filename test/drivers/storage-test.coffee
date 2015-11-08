@@ -68,7 +68,9 @@ describe 'drivers/storage', ->
       data$ = Rx.Observable.from data
       driver = makeStorageDriver()
       response$ = driver data$
-      response$.toArray().subscribe ([d1, d2, d3]) =>
+      response$.toArray().subscribe (a) =>
+        assert a.length is 3
+        [d1, d2, d3] = a
         assert.deepEqual d1, {}
         assert.deepEqual d2, foo: 'bar'
         assert.deepEqual d3, baz: 123
@@ -76,6 +78,27 @@ describe 'drivers/storage', ->
         assert @setItem.callCount is 2
         assert.deepEqual @setItem.getCall(0).args, ['foo', '"bar"']
         assert.deepEqual @setItem.getCall(1).args, ['baz', '123']
+        done()
+      , done
+      null
+
+  context 'set data (duplication)', ->
+    it 'works', (done) ->
+      data = [
+        foo: 'bar'
+      ,
+        foo: 'bar'
+      ]
+      data$ = Rx.Observable.from data
+      driver = makeStorageDriver()
+      response$ = driver data$
+      response$.toArray().subscribe (a) =>
+        assert a.length is 1
+        [d1] = a
+        assert.deepEqual d1, foo: 'bar'
+        assert @getItem.callCount is 0
+        assert @setItem.callCount is 1
+        assert.deepEqual @setItem.getCall(0).args, ['foo', '"bar"']
         done()
       , done
       null

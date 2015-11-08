@@ -47,9 +47,16 @@ function makeStorageDriver(initialState = {}) {
   const storage = g && g.localStorage ?
     g.localStorage : new Storage(initialState);
   return function(data$) {
-    return data$
+    const response$ = new Rx.ReplaySubject()
+    data$
+    .distinctUntilChanged()
     .map(data => data ? setData(storage, data) : getData(storage))
-    .share();
+    .subscribe(
+      response$.onNext.bind(response$),
+      response$.onError.bind(response$),
+      response$.onCompleted.bind(response$)
+    );
+    return response$;
   };
 }
 
