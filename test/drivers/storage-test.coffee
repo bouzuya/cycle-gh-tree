@@ -2,9 +2,9 @@ assert = require 'power-assert'
 sinon = require 'sinon'
 Rx = require 'rx'
 { Storage } = require '../../src/utils/storage'
-{ makeStorageDriver } = require '../../src/drivers/local-storage'
+{ makeStorageDriver } = require '../../src/drivers/storage'
 
-describe 'drivers/local-storage', ->
+describe 'drivers/storage', ->
   beforeEach ->
     @sinon = sinon.sandbox.create()
     @getItem = @sinon.spy Storage.prototype, 'getItem'
