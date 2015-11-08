@@ -17,7 +17,17 @@ function map(storage, callback) {
 }
 
 function getData(storage) {
-  return map(storage, ({ key, value }) => ({ key, value: JSON.parse(value) }))
+  return map(storage, ({ key, value }) => {
+    try {
+      const parsed = JSON.parse(value)
+      return { key, value: parsed };
+    } catch (e) {
+      // FIXME
+      console.error(e);
+      return null;
+    }
+  })
+  .filter(i => i)
   .reduce(((data, { key, value }) => {
     data[key] = value;
     return data;
