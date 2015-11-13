@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import hash from 'object-hash';
 import { Storage } from '../utils/storage';
 
 function getGlobal() {
@@ -49,7 +50,7 @@ function makeStorageDriver(initialState = {}) {
   return function(data$) {
     const response$ = new Rx.ReplaySubject()
     data$
-    .distinctUntilChanged()
+    .distinctUntilChanged(hash)
     .map(data => data ? setData(storage, data) : getData(storage))
     .subscribe(
       response$.onNext.bind(response$),
