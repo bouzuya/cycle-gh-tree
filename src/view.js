@@ -3,11 +3,12 @@ import Rx from 'rx';
 
 function renderTokenForm(state) {
   const { settings, token } = state;
+  const currentToken = settings && settings.token ? settings.token : '';
   return h('div', [
     h('input.token', { value: token.value }),
     h('button.save-token', ['save token']),
     h('span.token', [
-      settings.token.replace(/^(.*)(.{4})$/, (_, p1, p2) => {
+      currentToken.replace(/^(.*)(.{4})$/, (_, p1, p2) => {
         const masked = new Array(p1.length + 1).join('*');
         const opened = p2;
         return masked + opened;
@@ -51,9 +52,12 @@ export default function(state$) {
   });
   const request$ = state$
   .flatMap(({ requests }) => Rx.Observable.from(requests));
+  const data$ = state$
+  .map(({ settings }) => settings);
   const requests = {
     DOM: vtree$,
-    HTTP: request$
+    HTTP: request$,
+    Storage: data$
   };
   return requests;
 }

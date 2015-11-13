@@ -3,9 +3,7 @@ import Rx from 'rx';
 function initializeToken() {
   return {
     // TODO
-    settings: {
-      token: ''
-    },
+    settings: null,
     token: {
       value: ''
     }
@@ -19,6 +17,7 @@ function updateAndSaveToken(actions) {
     save$
     .map(() => state => {
       const { token } = state;
+      if (!state.settings) state.settings = {};
       state.settings.token = token.value;
       token.value = '';
       return state;
@@ -78,6 +77,7 @@ function addChildren(issues) {
 
 export default function(actions) {
   const {
+    loadSettings$,
     addRepo$,
     fetchIssues$,
     updateIssue$,
@@ -94,6 +94,11 @@ export default function(actions) {
   };
   const reposMaxLength = 10;
   const actions$ = Rx.Observable.merge(
+    loadSettings$
+    .map(storage => state => {
+      state.settings = storage;
+      return state;
+    }),
     fetchIssues$
     .map((_, i) => state => {
       const newRequests = state.repos.map(({ user, repo }, j) => {
@@ -136,6 +141,6 @@ export default function(actions) {
   const state$ = Rx.Observable.just(state)
     .merge(actions$)
     .scan((state, action) => action(state))
-    .share();
+    .shareReplay(1);
   return state$;
 }
