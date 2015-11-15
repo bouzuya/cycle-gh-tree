@@ -1,27 +1,6 @@
 import { h } from '@cycle/dom';
 import Rx from 'rx';
-
-function renderReposList(state) {
-  const { settings } = state;
-  const repos = settings && settings.repos ? settings.repos : [];
-  return h('ul.repo-list', repos.map(({ user, repo }, index) => {
-    const label = `${user}/${repo}`;
-    return h('li.repo', [
-      h('button.remove-repo.item-' + index.toString(), ['X']),
-      label
-    ]);
-  }));
-}
-
-function renderReposForm(state) {
-  const { repo } = state;
-  return h('div', [
-    h('input.user', { placeholder: 'user', value: repo.user }),
-    '/',
-    h('input.repo', { placeholder: 'repo', value: repo.repo }),
-    h('button.add', ['+'])
-  ]);
-}
+import reposSettingView from './views/repos-setting-view';
 
 function renderTokenForm(state) {
   const { settings, token } = state;
@@ -65,11 +44,7 @@ function renderSettingsView(state) {
       h('h1', ['Token']),
       renderTokenForm(state)
     ]),
-    h('div', [
-      h('h1', ['Repos']),
-      renderReposForm(state),
-      renderReposList(state)
-    ])
+    reposSettingView(state)
   ]);
 }
 
