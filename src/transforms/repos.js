@@ -10,13 +10,15 @@ function exists(repos, user, repo) {
 function addRepoTransform({ addRepo$ }, { reposMaxLength }) {
   return addRepo$
     .map(() => state => {
-      const { repos } = state;
+      const { settings } = state;
+      const repos = settings && settings.repos ? settings.repos : [];
       if (repos.length > reposMaxLength) return state;
       const { user, repo } = state.repo;
       if (exists(repos, user, repo)) return state;
       const newRepos = repos.concat([{ user, repo }]);
+      const newSettings = Object.assign({}, settings, { repos: newRepos });
       const newRepo = { user: null, repo: null };
-      return Object.assign({}, state, { repo: newRepo, repos: newRepos });
+      return Object.assign({}, state, { repo: newRepo, settings: newSettings });
     });
 }
 

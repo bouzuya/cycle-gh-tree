@@ -1,6 +1,14 @@
 import { h } from '@cycle/dom';
 import Rx from 'rx';
 
+function renderReposList(state) {
+  const { settings } = state;
+  const repos = settings && settings.repos ? settings.repos : [];
+  return h('ul', repos.map(({ user, repo }) => {
+    return h('li', [user, '/', repo]);
+  }));
+}
+
 function renderReposForm(state) {
   const { repo } = state;
   return h('div', [
@@ -30,13 +38,11 @@ function renderTokenForm(state) {
 export default function(state$) {
   const vtree$ = state$
   .map(state => {
-    const { issues, user, repo, repos } = state;
+    const { issues } = state;
     return h('div', [
       renderReposForm(state),
       renderTokenForm(state),
-      h('ul', repos.map(({ user, repo }) => {
-        return h('li', [user, '/', repo]);
-      })),
+      renderReposList(state),
       h('button.fetch', ['fetch']),
       h('ul', issues.map(({ user, repo, url, title, number, children }) => {
         return h('li', [

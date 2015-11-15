@@ -4,8 +4,8 @@ import token from './transforms/token';
 
 function initializeRepos() {
   return {
-    // TODO
-    repos: [],
+    // TODO: settings.repos: []
+    settings: null,
     repo: {
       repo: null,
       user: null
@@ -14,7 +14,7 @@ function initializeRepos() {
 }
 function initializeToken() {
   return {
-    // TODO
+    // TODO: settings.token: 'xxx'
     settings: null,
     token: {
       value: ''
@@ -88,7 +88,8 @@ export default function(actions) {
     fetchIssues$
     .map((_, i) => state => {
       const { settings } = state;
-      const newRequests = state.repos.map(({ user, repo }, j) => {
+      const repos = settings && settings.repos ? settings.repos : [];
+      const newRequests = repos.map(({ user, repo }, j) => {
         const id = i * reposMaxLength + j;
         const url = `https://api.github.com/repos/${user}/${repo}/issues`;
         const ua = { 'User-Agent': 'gh-tree' };
