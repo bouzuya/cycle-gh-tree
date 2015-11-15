@@ -35,30 +35,34 @@ function renderTokenForm(state) {
   ]);
 }
 
+function renderIssueTree(state) {
+  const { issues } = state;
+  return h('ul', issues.map(({ user, repo, url, title, number, children }) => {
+    return h('li', [
+      h('a', { href: url }, [`${user}/${repo}#${number}`]),
+      ' ',
+      title,
+      children.length === 0 ? null : h('ul', children.map(i => {
+        const { user, repo, url, title, number } = i;
+        return h('li', [
+          h('a', { href: url }, [`${user}/${repo}#${number}`]),
+          ' ',
+          title
+        ]);
+      }))
+    ]);
+  }));
+}
+
 export default function(state$) {
   const vtree$ = state$
   .map(state => {
-    const { issues } = state;
     return h('div', [
       renderReposForm(state),
       renderTokenForm(state),
       renderReposList(state),
       h('button.fetch', ['fetch']),
-      h('ul', issues.map(({ user, repo, url, title, number, children }) => {
-        return h('li', [
-          h('a', { href: url }, [`${user}/${repo}#${number}`]),
-          ' ',
-          title,
-          children.length === 0 ? null : h('ul', children.map(i => {
-            const { user, repo, url, title, number } = i;
-            return h('li', [
-              h('a', { href: url }, [`${user}/${repo}#${number}`]),
-              ' ',
-              title
-            ]);
-          }))
-        ]);
-      }))
+      renderIssueTree(state)
     ])
   });
   const request$ = state$
