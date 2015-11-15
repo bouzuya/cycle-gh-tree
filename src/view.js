@@ -5,9 +5,10 @@ function renderReposList(state) {
   const { settings } = state;
   const repos = settings && settings.repos ? settings.repos : [];
   return h('ul', repos.map(({ user, repo }, index) => {
+    const label = `${user}/${repo}`;
     return h('li', [
-      user, '/', repo,
-      h('button.remove-repo.item-' + index.toString(), ['X'])
+      h('button.remove-repo.item-' + index.toString(), ['X']),
+      label
     ]);
   }));
 }
@@ -15,10 +16,10 @@ function renderReposList(state) {
 function renderReposForm(state) {
   const { repo } = state;
   return h('div', [
-    h('input.user', { value: repo.user }),
+    h('input.user', { placeholder: 'user', value: repo.user }),
     '/',
-    h('input.repo', { value: repo.repo }),
-    h('button.add', ['add'])
+    h('input.repo', { placeholder: 'repo', value: repo.repo }),
+    h('button.add', ['+'])
   ]);
 }
 
@@ -60,9 +61,15 @@ function renderIssueTree(state) {
 function renderSettingsView(state) {
   return h('section#settings', [
     h('h1', ['Settings']),
-    renderReposForm(state),
-    renderTokenForm(state),
-    renderReposList(state)
+    h('div', [
+      h('h1', ['Token']),
+      renderTokenForm(state)
+    ]),
+    h('div', [
+      h('h1', ['Repos']),
+      renderReposForm(state),
+      renderReposList(state)
+    ])
   ]);
 }
 
