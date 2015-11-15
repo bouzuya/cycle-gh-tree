@@ -1,9 +1,16 @@
+$white = #fff
 $black = #333
+$gray = #999
+$light-gray = #ccc
 
 body
   color $black
   font-size 100%
   line-height 1.4
+
+#app
+  width 960px
+  margin 0 auto
 
 button
 input
@@ -13,7 +20,43 @@ input
   margin 4px
   border-radius 4px
 
+nav
+  ul
+    padding 0
+    margin 0
+    width 100%
+    display flex
+    justify-content space-between
+    list-style-type none
+  li
+    background-color $light-gray
+    padding 4px
+    flex auto
+    text-align center
+    border 1px solid $black
+    border-top-right-radius 4px
+    border-top-left-radius 4px
+    &:first-child
+      border-right none
+    &:hover
+      background-color $light-gray
+    &.active
+      border-bottom none
+      background-color $white
+      a
+        cursor default
+        color $black
+  a
+    display block
+    text-decoration none
+
 #settings
 #issues
+  border-right 1px solid $black
+  border-bottom 1px solid $black
+  border-left 1px solid $black
+  padding 16px
   h1
+    margin 0
+    padding 8px 16px
     font-size 100%
