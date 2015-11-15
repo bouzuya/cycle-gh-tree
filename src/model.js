@@ -2,6 +2,16 @@ import Rx from 'rx';
 import repos from './transforms/repos';
 import token from './transforms/token';
 
+function initializeRepos() {
+  return {
+    // TODO
+    repos: [],
+    repo: {
+      repo: null,
+      user: null
+    }
+  };
+}
 function initializeToken() {
   return {
     // TODO
@@ -64,10 +74,8 @@ export default function(actions) {
   } = actions;
   const state = {
     issues: [],
-    repos: [],
     requests: [],
-    repo: null,
-    user: null,
+    ...initializeRepos(),
     ...initializeToken()
   };
   const reposMaxLength = 10;

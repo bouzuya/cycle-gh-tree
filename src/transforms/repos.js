@@ -1,28 +1,47 @@
 import Rx from 'rx';
 
+function exists(repos, user, repo) {
+  return repos
+    .filter(i => {
+      return i.user === user && i.repo === repo;
+    }).length > 0;
+}
+
+function addRepoTransform({ addRepo$ }, { reposMaxLength }) {
+  return addRepo$
+    .map(() => state => {
+      const { repos } = state;
+      if (repos.length > reposMaxLength) return state;
+      const { user, repo } = state.repo;
+      if (exists(repos, user, repo)) return state;
+      const newRepos = repos.concat([{ user, repo }]);
+      return Object.assign({}, state, { repos: newRepos });
+    });
+}
+
+function updateRepoTransform({ updateRepo$ }) {
+  return updateRepo$
+    .map(value => state => {
+      const { repo } = state;
+      const newRepo = Object.assign({}, repo, { repo: value });
+      return Object.assign({}, state, { repo: newRepo });
+    });
+}
+
+function updateUserTransform({ updateUser$ }) {
+  return updateUser$
+    .map(value => state => {
+      const { repo } = state;
+      const newRepo = Object.assign({}, repo, { user: value });
+      return Object.assign({}, state, { repo: newRepo });
+    });
+}
+
 export default function({ repos }, { reposMaxLength }) {
-  const { addRepo$, updateRepo$, updateUser$ } = repos; // actions
+  const actions = repos;
   return Rx.Observable.merge(
-    addRepo$
-    .map(repo => state => {
-      const { user, repo } = state;
-      if (state.repos.length > reposMaxLength) return state;
-      const duplicated = state.repos.filter(i => {
-        return i.user === user && i.repo === repo;
-      }).length > 0;
-      if (duplicated) return state;
-      state.repos.push({ user, repo });
-      return state;
-    }),
-    updateRepo$
-    .map(repo => state => {
-      state.repo = repo;
-      return state;
-    }),
-    updateUser$
-    .map(user => state => {
-      state.user = user;
-      return state;
-    })
+    addRepoTransform(actions, { reposMaxLength }),
+    updateRepoTransform(actions),
+    updateUserTransform(actions)
   );
 }
