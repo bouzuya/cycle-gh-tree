@@ -26,6 +26,7 @@ function initializeToken() {
 export default function(actions) {
   const { loadSettings$ } = actions;
   const state = {
+    currentTab: "settings",
     issues: [],
     requests: [],
     ...initializeRepos(),

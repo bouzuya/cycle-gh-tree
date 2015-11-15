@@ -54,6 +54,23 @@ function renderIssueTree(state) {
   }));
 }
 
+function renderSettingsView(state) {
+  return h('section#settings', [
+    h('h1', ['Settings']),
+    renderReposForm(state),
+    renderTokenForm(state),
+    renderReposList(state)
+  ]);
+}
+
+function renderIssuesView(state) {
+  return h('section#issues', [
+    h('h1', ['Issues']),
+    h('button.fetch', ['fetch']),
+    renderIssueTree(state)
+  ]);
+}
+
 export default function(state$) {
   const vtree$ = state$
   .map(state => {
@@ -61,24 +78,17 @@ export default function(state$) {
       h('h1', ['cycle-gh-tree']),
       h('nav', [
         h('ul', ['settings', 'issues'].map(i => {
-            return h('li', [
+            const klass = (state.currentTab === i ? '.active' : '');
+            return h('li' + klass, [
               h('a', { href: '#' + i }, [
                 i.replace(/^(.)/, j => j.toUpperCase())
               ])
             ]);
         }))
       ]),
-      h('section#settings', [
-        h('h1', ['Settings']),
-        renderReposForm(state),
-        renderTokenForm(state),
-        renderReposList(state)
-      ]),
-      h('section#issues', [
-        h('h1', ['Issues']),
-        h('button.fetch', ['fetch']),
-        renderIssueTree(state)
-      ])
+      state.currentTab === 'settings'
+        ? renderSettingsView(state)
+        : renderIssuesView(state)
     ])
   });
   const request$ = state$
