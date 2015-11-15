@@ -22,6 +22,18 @@ function addRepoTransform({ addRepo$ }, { reposMaxLength }) {
     });
 }
 
+function removeRepoTransform({ removeRepo$ }) {
+  return removeRepo$
+    .map(index => state => {
+      const { settings } = state;
+      const repos = settings && settings.repos ? settings.repos : [];
+      if (repos.length === 0) return state;
+      const newRepos = repos.filter((_, i) => i !== index);
+      const newSettings = Object.assign({}, settings, { repos: newRepos });
+      return Object.assign({}, state, { settings: newSettings });
+    });
+}
+
 function updateRepoTransform({ updateRepo$ }) {
   return updateRepo$
     .map(value => state => {
@@ -44,6 +56,7 @@ export default function({ repos }, { reposMaxLength }) {
   const actions = repos;
   return Rx.Observable.merge(
     addRepoTransform(actions, { reposMaxLength }),
+    removeRepoTransform(actions),
     updateRepoTransform(actions),
     updateUserTransform(actions)
   );

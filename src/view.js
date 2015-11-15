@@ -4,8 +4,11 @@ import Rx from 'rx';
 function renderReposList(state) {
   const { settings } = state;
   const repos = settings && settings.repos ? settings.repos : [];
-  return h('ul', repos.map(({ user, repo }) => {
-    return h('li', [user, '/', repo]);
+  return h('ul', repos.map(({ user, repo }, index) => {
+    return h('li', [
+      user, '/', repo,
+      h('button.remove-repo.item-' + index.toString(), ['X'])
+    ]);
   }));
 }
 
