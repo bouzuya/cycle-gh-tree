@@ -4,9 +4,9 @@ import Rx from 'rx';
 function renderReposList(state) {
   const { settings } = state;
   const repos = settings && settings.repos ? settings.repos : [];
-  return h('ul', repos.map(({ user, repo }, index) => {
+  return h('ul.repo-list', repos.map(({ user, repo }, index) => {
     const label = `${user}/${repo}`;
-    return h('li', [
+    return h('li.repo', [
       h('button.remove-repo.item-' + index.toString(), ['X']),
       label
     ]);
