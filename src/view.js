@@ -58,11 +58,27 @@ export default function(state$) {
   const vtree$ = state$
   .map(state => {
     return h('div', [
-      renderReposForm(state),
-      renderTokenForm(state),
-      renderReposList(state),
-      h('button.fetch', ['fetch']),
-      renderIssueTree(state)
+      h('h1', ['cycle-gh-tree']),
+      h('nav', [
+        h('ul', ['settings', 'issues'].map(i => {
+            return h('li', [
+              h('a', { href: '#' + i }, [
+                i.replace(/^(.)/, j => j.toUpperCase())
+              ])
+            ]);
+        }))
+      ]),
+      h('section#settings', [
+        h('h1', ['Settings']),
+        renderReposForm(state),
+        renderTokenForm(state),
+        renderReposList(state)
+      ]),
+      h('section#issues', [
+        h('h1', ['Issues']),
+        h('button.fetch', ['fetch']),
+        renderIssueTree(state)
+      ])
     ])
   });
   const request$ = state$
