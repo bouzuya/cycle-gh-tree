@@ -24,7 +24,7 @@ function initializeToken() {
 }
 
 export default function(actions) {
-  const { loadSettings$ } = actions;
+  const { loadSettings$, switchTab$ } = actions;
   const state = {
     currentTab: "settings",
     issues: [],
@@ -38,6 +38,11 @@ export default function(actions) {
       .map(storage => state => {
         state.settings = storage;
         return state;
+      }),
+    switchTab$
+      .map(value => state => {
+        state.currentTab = value;
+        return state
       }),
     issues(actions, { reposMaxLength }),
     repos(actions, { reposMaxLength }),
