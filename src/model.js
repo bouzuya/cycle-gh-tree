@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import repos from './transforms/repos';
 import token from './transforms/token';
 
 function initializeToken() {
@@ -58,11 +59,8 @@ function addChildren(issues) {
 export default function(actions) {
   const {
     loadSettings$,
-    addRepo$,
     fetchIssues$,
     updateIssue$,
-    updateRepo$,
-    updateUser$
   } = actions;
   const state = {
     issues: [],
@@ -95,31 +93,11 @@ export default function(actions) {
       state.requests = state.requests.concat(newRequests);
       return state;
     }),
-    addRepo$
-    .map(repo => state => {
-      const { user, repo } = state;
-      if (state.repos.length > reposMaxLength) return state;
-      const duplicated = state.repos.filter(i => {
-        return i.user === user && i.repo === repo;
-      }).length > 0;
-      if (duplicated) return state;
-      state.repos.push({ user, repo });
-      return state;
-    }),
+    repos(actions, { reposMaxLength }),
     token(actions),
     updateIssue$
     .map(issue => state => {
       state.issues = merge(state.issues, issue);
-      return state;
-    }),
-    updateRepo$
-    .map(repo => state => {
-      state.repo = repo;
-      return state;
-    }),
-    updateUser$
-    .map(user => state => {
-      state.user = user;
       return state;
     })
   );
