@@ -1,6 +1,16 @@
 import { h } from '@cycle/dom';
 import Rx from 'rx';
 
+function renderReposForm(state) {
+  const { repo } = state;
+  return h('div', [
+    h('input.user', { value: repo.user }),
+    '/',
+    h('input.repo', { value: repo.repo }),
+    h('button.add', ['add'])
+  ]);
+}
+
 function renderTokenForm(state) {
   const { settings, token } = state;
   const currentToken = settings && settings.token ? settings.token : '';
@@ -22,12 +32,7 @@ export default function(state$) {
   .map(state => {
     const { issues, user, repo, repos } = state;
     return h('div', [
-      h('div', [
-        h('input.user'),
-        '/',
-        h('input.repo'),
-        h('button.add', ['add'])
-      ]),
+      renderReposForm(state),
       renderTokenForm(state),
       h('ul', repos.map(({ user, repo }) => {
         return h('li', [user, '/', repo]);
