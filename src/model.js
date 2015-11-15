@@ -81,10 +81,15 @@ export default function(actions) {
     }),
     fetchIssues$
     .map((_, i) => state => {
+      const { settings } = state;
       const newRequests = state.repos.map(({ user, repo }, j) => {
         const id = i * reposMaxLength + j;
         const url = `https://api.github.com/repos/${user}/${repo}/issues`;
-        const headers = { 'User-Agent': 'gh-tree' };
+        const ua = { 'User-Agent': 'gh-tree' };
+        const auth = settings.token ? {
+          'Authorization': `token ${settings.token}`
+        } : {};
+        const headers = Object.assign({}, ua, auth);
         return { id, method: 'GET', url, headers };
       });
       state.requests = state.requests.concat(newRequests);
