@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import token from './transforms/token';
 
 function initializeToken() {
   return {
@@ -8,27 +9,6 @@ function initializeToken() {
       value: ''
     }
   };
-}
-
-function updateAndSaveToken(actions) {
-  const { token } = actions; // namespace
-  const { save$, update$ } = token; // actions
-  return Rx.Observable.merge(
-    save$
-    .map(() => state => {
-      const { token } = state;
-      if (!state.settings) state.settings = {};
-      state.settings.token = token.value;
-      token.value = '';
-      return state;
-    }),
-    update$
-    .map(value => state => {
-      const { token } = state;
-      token.value = value;
-      return state;
-    })
-  );
 }
 
 function indexOf(issues, issue) {
@@ -121,7 +101,7 @@ export default function(actions) {
       state.repos.push({ user, repo });
       return state;
     }),
-    updateAndSaveToken(actions),
+    token(actions),
     updateIssue$
     .map(issue => state => {
       state.issues = merge(state.issues, issue);
