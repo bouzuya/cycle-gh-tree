@@ -57,8 +57,12 @@ function renderIssuesView(state) {
 }
 
 function renderFiltersView(state) {
+  const { labels } = state;
   return h('section.filters', [
-    h('h1', ['Filters'])
+    h('h1', ['Filters']),
+    h('ul', labels.map(i => h('li', [
+      i
+    ])))
   ]);
 }
 

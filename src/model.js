@@ -30,6 +30,7 @@ export default function(actions) {
     {
       currentTab: "settings",
       issues: [],
+      labels: ['bug', 'in progress', 'review'], // TODO: fetch labels
       requests: []
     },
     initializeRepos(),
