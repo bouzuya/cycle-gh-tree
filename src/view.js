@@ -38,7 +38,7 @@ function renderIssueTree(state) {
 }
 
 function renderSettingsView(state) {
-  return h('section#settings', [
+  return h('section.settings', [
     h('h1', ['Settings']),
     h('div', [
       h('h1', ['Token']),
@@ -49,11 +49,24 @@ function renderSettingsView(state) {
 }
 
 function renderIssuesView(state) {
-  return h('section#issues', [
+  return h('section.issues', [
     h('h1', ['Issues']),
     h('button.fetch', ['fetch']),
     renderIssueTree(state)
   ]);
+}
+
+function renderFiltersView(state) {
+  return h('section.filters', [
+    h('h1', ['Filters'])
+  ]);
+}
+
+function renderTabView(state) {
+  const { currentTab } = state;
+  if (currentTab === 'settings') return renderSettingsView(state);
+  if (currentTab === 'filters') return renderFiltersView(state);
+  return renderIssuesView(state);
 }
 
 export default function(state$) {
@@ -62,7 +75,7 @@ export default function(state$) {
     return h('div', [
       h('h1', ['cycle-gh-tree']),
       h('nav', [
-        h('ul', ['settings', 'issues'].map(i => {
+        h('ul', ['settings', 'issues', 'filters'].map(i => {
             const klass = (state.currentTab === i ? '.active' : '');
             return h('li' + klass, [
               h('a', { href: '#' + i }, [
@@ -71,9 +84,7 @@ export default function(state$) {
             ]);
         }))
       ]),
-      state.currentTab === 'settings'
-        ? renderSettingsView(state)
-        : renderIssuesView(state)
+      renderTabView(state)
     ])
   });
   const request$ = state$
