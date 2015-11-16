@@ -3,10 +3,10 @@ import { h } from '@cycle/dom';
 function renderRepoForm(state) {
   const { repo } = state;
   return h('div', [
+    h('button.add', ['+']),
     h('input.user', { placeholder: 'user', value: repo.user }),
     '/',
-    h('input.repo', { placeholder: 'repo', value: repo.repo }),
-    h('button.add', ['+'])
+    h('input.repo', { placeholder: 'repo', value: repo.repo })
   ]);
 }
 
@@ -16,7 +16,7 @@ function renderRepoList(state) {
   return h('ul.repo-list', repos.map(({ user, repo }, index) => {
     const label = `${user}/${repo}`;
     return h('li.repo', [
-      h('button.remove-repo.item-' + index.toString(), ['X']),
+      h('button.remove-repo.item-' + index.toString(), ['x']),
       label
     ]);
   }));
