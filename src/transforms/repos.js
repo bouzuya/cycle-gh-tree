@@ -15,6 +15,7 @@ function addRepoTransform({ addRepo$ }, { reposMaxLength }) {
       if (repos.length > reposMaxLength) return state;
       const { user, repo } = state.repo;
       if (exists(repos, user, repo)) return state;
+      if ((user || '').length === 0 || (repo || '').length === 0) return state;
       const newRepos = repos.concat([{ user, repo }]);
       const newSettings = Object.assign({}, settings, { repos: newRepos });
       const newRepo = { user: null, repo: null };
