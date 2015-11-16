@@ -59,6 +59,7 @@ function fetchIssuesTransform({ fetchIssues$ }, { reposMaxLength }) {
         const headers = Object.assign({}, ua, auth);
         return { id, method: 'GET', url, headers };
       });
+      state.issues = [];
       state.requests = state.requests.concat(newRequests);
       return state;
     });
