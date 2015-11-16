@@ -1,9 +1,7 @@
 import Rx from 'rx';
 
-export default function({ token }) {
-  const { save$, update$ } = token; // actions
-  return Rx.Observable.merge(
-    save$
+function saveTransform({ save$ }) {
+  return save$
     .map(() => state => {
       const { token } = state;
       const { settings } = state;
@@ -12,12 +10,23 @@ export default function({ token }) {
       return Object.assign({}, state, {
         settings: newSettings, token: newToken
       });
-    }),
-    update$
+    });
+}
+
+function updateTransform({ update$ }) {
+  return update$
     .map(value => state => {
       const { token } = state;
       const newToken = Object.assign({}, token, { value });
       return Object.assign({}, state, { token: newToken });
-    })
-  );
+    });
+}
+
+export default function({ token }) {
+  const actions = token;
+  return Rx.Observable
+    .merge(
+      saveTransform(actions),
+      updateTransform(actions)
+    );
 }

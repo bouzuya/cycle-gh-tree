@@ -55,10 +55,11 @@ function updateUserTransform({ updateUser$ }) {
 
 export default function({ repos }, { reposMaxLength }) {
   const actions = repos;
-  return Rx.Observable.merge(
-    addRepoTransform(actions, { reposMaxLength }),
-    removeRepoTransform(actions),
-    updateRepoTransform(actions),
-    updateUserTransform(actions)
-  );
+  return Rx.Observable
+    .merge(
+      addRepoTransform(actions, { reposMaxLength }),
+      removeRepoTransform(actions),
+      updateRepoTransform(actions),
+      updateUserTransform(actions)
+    );
 }
