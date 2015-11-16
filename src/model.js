@@ -24,13 +24,25 @@ function initializeToken() {
   };
 }
 
+function labels(actions) {
+  const { updateLabel$ } = actions;
+  return updateLabel$
+    .map(label => state => {
+      const { labels } = state;
+      const index = labels.indexOf(label);
+      if (index >= 0) return state;
+      const newLabels = labels.concat([label]);
+      return Object.assign({}, state, { labels: newLabels });
+    });
+}
+
 export default function(actions) {
   const { loadSettings$, switchTab$ } = actions;
   const state = assign(
     {
       currentTab: "settings",
       issues: [],
-      labels: ['bug', 'in progress', 'review'], // TODO: fetch labels
+      labels: [],
       requests: []
     },
     initializeRepos(),
@@ -48,6 +60,7 @@ export default function(actions) {
         state.currentTab = value;
         return state
       }),
+    labels(actions),
     issues(actions, { reposMaxLength }),
     repos(actions, { reposMaxLength }),
     token(actions)
