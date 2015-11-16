@@ -1,4 +1,13 @@
+import Rx from 'rx';
+
 export default function({ DOM }) {
-  const addRepo$ = DOM.select('button.add').events('click');
+  const enterKeyCode = 13;
+  const addRepo$ = Rx.Observable.merge(
+    DOM.select('button.add').events('click'),
+    DOM.select('input.user').events('keydown')
+      .filter(i => i.keyCode === enterKeyCode),
+    DOM.select('input.repo').events('keydown')
+      .filter(i => i.keyCode === enterKeyCode)
+  );
   return { addRepo$ };
 }
