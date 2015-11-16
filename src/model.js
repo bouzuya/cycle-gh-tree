@@ -48,7 +48,8 @@ export default function(actions) {
     repos(actions, { reposMaxLength }),
     token(actions)
   );
-  const state$ = Rx.Observable.just(state)
+  const state$ = Rx.Observable
+    .just(state)
     .merge(actions$)
     .scan((state, action) => action(state))
     .shareReplay(1);
