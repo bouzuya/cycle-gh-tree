@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Rx, ReplaySubject } from 'rx';
 import hash from 'object-hash';
 import { Storage } from '../utils/storage';
 
@@ -48,15 +48,11 @@ function makeStorageDriver(initialState = {}) {
   const storage = g && g.localStorage ?
     g.localStorage : new Storage(initialState);
   return function(data$) {
-    const response$ = new Rx.ReplaySubject()
-    data$
-    .distinctUntilChanged(hash)
-    .map(data => data ? setData(storage, data) : getData(storage))
-    .subscribe(
-      response$.onNext.bind(response$),
-      response$.onError.bind(response$),
-      response$.onCompleted.bind(response$)
-    );
+    const response$ = data$
+      .distinctUntilChanged(hash)
+      .map(data => data ? setData(storage, data) : getData(storage))
+      .multicast(new ReplaySubject(1));
+    response$.connect();
     return response$;
   };
 }
