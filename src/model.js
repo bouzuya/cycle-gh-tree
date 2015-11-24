@@ -2,6 +2,7 @@ import Rx from 'rx';
 import issues from './transforms/issues';
 import repos from './transforms/repos';
 import token from './transforms/token';
+import assign from './utils/assign';
 
 function initializeRepos() {
   return {
@@ -25,13 +26,15 @@ function initializeToken() {
 
 export default function(actions) {
   const { loadSettings$, switchTab$ } = actions;
-  const state = {
-    currentTab: "settings",
-    issues: [],
-    requests: [],
-    ...initializeRepos(),
-    ...initializeToken()
-  };
+  const state = assign(
+    {
+      currentTab: "settings",
+      issues: [],
+      requests: []
+    },
+    initializeRepos(),
+    initializeToken()
+  );
   const reposMaxLength = 10;
   const actions$ = Rx.Observable.merge(
     loadSettings$
