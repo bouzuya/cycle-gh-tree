@@ -79,6 +79,6 @@ export default function(actions, { reposMaxLength }) {
   return Rx.Observable
     .merge(
       fetchIssuesTransform(actions, { reposMaxLength }),
-      updateIssueTransform(actions),
+      updateIssueTransform(actions)
     );
 }
