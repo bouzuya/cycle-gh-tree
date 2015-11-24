@@ -61,4 +61,4 @@ function makeStorageDriver(initialState = {}) {
   };
 }
 
-export default { makeStorageDriver };
+export { makeStorageDriver };

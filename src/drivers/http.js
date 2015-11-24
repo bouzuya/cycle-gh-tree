@@ -17,4 +17,4 @@ function makeHTTPDriver() {
   };
 }
 
-export default { makeHTTPDriver };
+export { makeHTTPDriver };
