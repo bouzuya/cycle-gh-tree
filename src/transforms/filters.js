@@ -7,6 +7,18 @@ function addFilterTransform({ addFilter$ }) {
   }));
 }
 
+function fetchLabelsTransform({ fetchLabels$ }) {
+  return fetchLabels$.map(transform(({ filters }) => {
+    return { filters: filters.filter(i => i.type !== 'label') };
+  }));
+}
+
+function fetchMilestonesTransform({ fetchMilestones$ }) {
+  return fetchMilestones$.map(transform(({ filters }) => {
+    return { filters: filters.filter(i => i.type !== 'milestone') };
+  }));
+}
+
 function removeFilterTransform({ removeFilter$ }) {
   return removeFilter$.map(transform(({ filters }, filter) => {
     const newFilters = filters.filter(i => {
@@ -20,6 +32,8 @@ export default function(actions) {
   // NOTE: no namespace
   return Observable.merge(
     addFilterTransform(actions),
+    fetchLabelsTransform(actions),
+    fetchMilestonesTransform(actions),
     removeFilterTransform(actions)
   );
 }
