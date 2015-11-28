@@ -27,8 +27,7 @@ function fetchIssuesTransform({ fetchIssues$ }) {
       const newAllRequests = repos.reduce((requests, { user, repo }) => {
         return newRequests(requests, newIssueRequest({ user, repo, token }));
       }, requests);
-      // NOTE: reset issues
-      return assign({}, state, { issues: [], requests: newAllRequests });
+      return assign({}, state, { requests: newAllRequests });
     });
 }
 
@@ -41,8 +40,7 @@ function fetchLabelsTransform({ fetchLabels$ }) {
       const newAllRequests = repos.reduce((requests, { user, repo }) => {
         return newRequests(requests, newLabelRequest({ user, repo, token }));
       }, requests);
-      // NOTE: reset labels
-      return assign({}, state, { labels: [], requests: newAllRequests });
+      return assign({}, state, { requests: newAllRequests });
     });
 }
 

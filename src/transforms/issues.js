@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
 
 function indexOf(issues, issue) {
@@ -60,6 +60,11 @@ function filter(issues, filters) {
   }, issues);
 }
 
+function fetchIssuesTransform({ fetchIssues$ }) {
+  return fetchIssues$
+    .map(() => state => assign({}, state, { issues: [] }));
+}
+
 function updateIssueTransform({ updateIssue$ }) {
   return updateIssue$
     .map(issue => state => {
@@ -71,5 +76,8 @@ function updateIssueTransform({ updateIssue$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return updateIssueTransform(actions);
+  return Observable.merge(
+    fetchIssuesTransform(actions),
+    updateIssueTransform(actions)
+  );
 }
