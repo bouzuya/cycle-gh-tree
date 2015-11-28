@@ -49,16 +49,21 @@ function addChildren(issues) {
 }
 
 function filter(issues, filters) {
-  return filters.reduce((issues, filter) => {
-    return issues.filter(issue => {
-      switch (filter.type) {
-        case 'label':
-          return issue.labels.filter(l => l === filter.name).length > 0;
-        default:
-          return true;
-      }
+  const labels = filters
+    .filter(i => i.type === 'label')
+    .map(i => i.name);
+  const milestones = filters
+    .filter(i => i.type === 'milestone')
+    .map(i => i.name);
+  return issues
+    .filter(issue => {
+      if (labels.length === 0) return true;
+      return labels.some(i => issue.labels.some(j => i === j));
+    })
+    .filter(issue => {
+      if (milestones.length === 0) return true;
+      return milestones.some(i => i === issue.milestone);
     });
-  }, issues);
 }
 
 function fetchIssuesTransform({ fetchIssues$ }) {
