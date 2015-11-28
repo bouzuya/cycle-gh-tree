@@ -23,6 +23,14 @@ function newLabelRequest({ user, repo, token }) {
   return { method: 'GET', url, headers };
 }
 
+function newMilestoneRequest({ user, repo, token }) {
+  const url = `https://api.github.com/repos/${user}/${repo}/milestones`;
+  const ua = { 'User-Agent': 'gh-tree' };
+  const auth = token ? { 'Authorization': `token ${token}` } : {};
+  const headers = assign({}, ua, auth);
+  return { method: 'GET', url, headers };
+}
+
 function fetchIssuesTransform({ fetchIssues$ }) {
   return fetchIssues$.map(transform(({ settings, requests }) => {
     const repos = settings && settings.repos ? settings.repos : [];
@@ -45,10 +53,22 @@ function fetchLabelsTransform({ fetchLabels$ }) {
   }));
 }
 
+function fetchMilestonesTransform({ fetchMilestones$ }) {
+  return fetchMilestones$.map(transform(({ settings, requests }) => {
+    const repos = settings && settings.repos ? settings.repos : [];
+    const token = settings.token;
+    const newAllRequests = repos.reduce((requests, { user, repo }) => {
+      return newRequests(requests, newMilestoneRequest({ user, repo, token }));
+    }, requests);
+    return { requests: newAllRequests };
+  }));
+}
+
 export default function labels(actions) {
   // NOTE: no namespace
   return Observable.merge(
     fetchIssuesTransform(actions),
-    fetchLabelsTransform(actions)
+    fetchLabelsTransform(actions),
+    fetchMilestonesTransform(actions)
   );
 }
