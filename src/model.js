@@ -2,6 +2,7 @@ import Rx from 'rx';
 import issues from './transforms/issues';
 import labels from './transforms/labels';
 import repos from './transforms/repos';
+import requests from './transforms/requests';
 import token from './transforms/token';
 import assign from './utils/assign';
 
@@ -18,6 +19,10 @@ function initializeRepos() {
       user: null
     }
   };
+}
+
+function initializeRequests() {
+  return { requests: [] };
 }
 
 function initializeToken() {
@@ -40,11 +45,11 @@ export default function(actions) {
         { type: 'label', name: 'bug' },
         { type: 'label', name: 'ready' }
       ],
-      issues: [],
-      requests: []
+      issues: []
     },
     initializeLabels(),
     initializeRepos(),
+    initializeRequests(),
     initializeToken()
   );
   const reposMaxLength = 10;
@@ -62,6 +67,7 @@ export default function(actions) {
     issues(actions),
     labels(actions),
     repos(actions, { reposMaxLength }),
+    requests(actions),
     token(actions)
   );
   const state$ = Rx.Observable

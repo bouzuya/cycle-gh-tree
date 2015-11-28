@@ -1,6 +1,5 @@
 import Rx from 'rx';
 import assign from '../utils/assign';
-import newRequests from '../utils/new-requests';
 
 function indexOf(issues, issue) {
   const indexes = issues
@@ -48,27 +47,6 @@ function addChildren(issues) {
     });
 }
 
-function newRequest({ user, repo, token }) {
-  const url = `https://api.github.com/repos/${user}/${repo}/issues`;
-  const ua = { 'User-Agent': 'gh-tree' };
-  const auth = token ? { 'Authorization': `token ${token}` } : {};
-  const headers = assign({}, ua, auth);
-  return { method: 'GET', url, headers };
-}
-
-function fetchIssuesTransform({ fetchIssues$ }) {
-  return fetchIssues$
-    .map(() => state => {
-      const { settings, requests } = state;
-      const repos = settings && settings.repos ? settings.repos : [];
-      const token = settings.token;
-      const newAllRequests = repos.reduce((requests, { user, repo }) => {
-        return newRequests(requests, newRequest({ user, repo, token }));
-      }, requests);
-      return assign({}, state, { issues: [], requests: newAllRequests });
-    });
-}
-
 function updateIssueTransform({ updateIssue$ }) {
   return updateIssue$
     .map(issue => state => {
@@ -80,9 +58,5 @@ function updateIssueTransform({ updateIssue$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Rx.Observable
-    .merge(
-      fetchIssuesTransform(actions),
-      updateIssueTransform(actions)
-    );
+  return updateIssueTransform(actions);
 }
