@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import assign from '../utils/assign';
 
 function exists(repos, user, repo) {
   return repos
@@ -17,9 +18,9 @@ function addRepoTransform({ addRepo$ }, { reposMaxLength }) {
       if (exists(repos, user, repo)) return state;
       if ((user || '').length === 0 || (repo || '').length === 0) return state;
       const newRepos = repos.concat([{ user, repo }]);
-      const newSettings = Object.assign({}, settings, { repos: newRepos });
+      const newSettings = assign({}, settings, { repos: newRepos });
       const newRepo = { user: null, repo: null };
-      return Object.assign({}, state, { repo: newRepo, settings: newSettings });
+      return assign({}, state, { repo: newRepo, settings: newSettings });
     });
 }
 
@@ -30,8 +31,8 @@ function removeRepoTransform({ removeRepo$ }) {
       const repos = settings && settings.repos ? settings.repos : [];
       if (repos.length === 0) return state;
       const newRepos = repos.filter((_, i) => i !== index);
-      const newSettings = Object.assign({}, settings, { repos: newRepos });
-      return Object.assign({}, state, { settings: newSettings });
+      const newSettings = assign({}, settings, { repos: newRepos });
+      return assign({}, state, { settings: newSettings });
     });
 }
 
@@ -39,8 +40,8 @@ function updateRepoTransform({ updateRepo$ }) {
   return updateRepo$
     .map(value => state => {
       const { repo } = state;
-      const newRepo = Object.assign({}, repo, { repo: value });
-      return Object.assign({}, state, { repo: newRepo });
+      const newRepo = assign({}, repo, { repo: value });
+      return assign({}, state, { repo: newRepo });
     });
 }
 
@@ -48,8 +49,8 @@ function updateUserTransform({ updateUser$ }) {
   return updateUser$
     .map(value => state => {
       const { repo } = state;
-      const newRepo = Object.assign({}, repo, { user: value });
-      return Object.assign({}, state, { repo: newRepo });
+      const newRepo = assign({}, repo, { user: value });
+      return assign({}, state, { repo: newRepo });
     });
 }
 

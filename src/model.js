@@ -32,7 +32,7 @@ function labels(actions) {
       const index = labels.indexOf(label);
       if (index >= 0) return state;
       const newLabels = labels.concat([label]);
-      return Object.assign({}, state, { labels: newLabels });
+      return assign({}, state, { labels: newLabels });
     });
 }
 
