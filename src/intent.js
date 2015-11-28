@@ -1,4 +1,5 @@
 import fetchIssues from './actions/fetch-issues';
+import fetchLabels from './actions/fetch-labels';
 import loadSettings from './actions/load-settings';
 import repo from './actions/repos/';
 import switchTab from './actions/switch-tab';
@@ -11,6 +12,7 @@ export default function(responses) {
   const actions = assign(
     {},
     fetchIssues(responses),
+    fetchLabels(responses),
     loadSettings(responses),
     repo(responses),
     switchTab(responses),

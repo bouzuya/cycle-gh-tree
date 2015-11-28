@@ -51,7 +51,7 @@ function renderSettingsView(state) {
 function renderIssuesView(state) {
   return h('section.issues', [
     h('h1', ['Issues']),
-    h('button.fetch', ['fetch']),
+    h('button.fetch-issues', ['fetch']),
     renderIssueTree(state)
   ]);
 }
@@ -60,6 +60,7 @@ function renderFiltersView(state) {
   const { labels } = state;
   return h('section.filters', [
     h('h1', ['Filters']),
+    h('button.fetch-labels', ['fetch']),
     h('ul', labels.map(i => h('li', [
       i
     ])))
