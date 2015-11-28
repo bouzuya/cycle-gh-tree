@@ -1,4 +1,5 @@
 import Rx from 'rx';
+import assign from '../utils/assign';
 
 function indexOf(issues, issue) {
   const indexes = issues
@@ -22,9 +23,9 @@ function addParent(issues) {
   return issues
     .map(issue => {
       const m = (issue.body || '').match(/^(?:([^\/]+)\/([^#]+))?#(\d+)/);
-      if (!m) return Object.assign({}, issue, { parent: null });
+      if (!m) return assign({}, issue, { parent: null });
       const [_, u, r, n] = m;
-      return Object.assign({}, issue, {
+      return assign({}, issue, {
         parent: {
           user: u || issue.user,
           repo: r || issue.repo,
@@ -42,7 +43,7 @@ function addChildren(issues) {
         const p = i.parent;
         return p && p.user === user && p.repo === repo && p.number === number;
       });
-      return Object.assign({}, issue, { children });
+      return assign({}, issue, { children });
     });
 }
 
@@ -58,10 +59,10 @@ function fetchIssuesTransform({ fetchIssues$ }, { reposMaxLength }) {
         const auth = settings.token ? {
           'Authorization': `token ${settings.token}`
         } : {};
-        const headers = Object.assign({}, ua, auth);
+        const headers = assign({}, ua, auth);
         return { id, method: 'GET', url, headers };
       }));
-      return Object.assign({}, state, { issues: [], requests: newRequests });
+      return assign({}, state, { issues: [], requests: newRequests });
     });
 }
 
@@ -70,7 +71,7 @@ function updateIssueTransform({ updateIssue$ }) {
     .map(issue => state => {
       const { issues } = state;
       const newIssues = merge(issues, issue);
-      return Object.assign({}, state, { issues: newIssues });
+      return assign({}, state, { issues: newIssues });
     });
 }
 

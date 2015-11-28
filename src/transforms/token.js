@@ -1,13 +1,14 @@
 import Rx from 'rx';
+import assign from '../utils/assign';
 
 function saveTransform({ save$ }) {
   return save$
     .map(() => state => {
       const { token } = state;
       const { settings } = state;
-      const newSettings = Object.assign({}, settings, { token: token.value });
-      const newToken = Object.assign({}, token, { value: null });
-      return Object.assign({}, state, {
+      const newSettings = assign({}, settings, { token: token.value });
+      const newToken = assign({}, token, { value: null });
+      return assign({}, state, {
         settings: newSettings, token: newToken
       });
     });
@@ -17,8 +18,8 @@ function updateTransform({ update$ }) {
   return update$
     .map(value => state => {
       const { token } = state;
-      const newToken = Object.assign({}, token, { value });
-      return Object.assign({}, state, { token: newToken });
+      const newToken = assign({}, token, { value });
+      return assign({}, state, { token: newToken });
     });
 }
 
