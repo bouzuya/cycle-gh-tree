@@ -47,11 +47,24 @@ function addChildren(issues) {
     });
 }
 
+function filter(issues, filters) {
+  return filters.reduce((issues, filter) => {
+    return issues.filter(issue => {
+      switch (filter.type) {
+        case 'label':
+          return issue.labels.filter(l => l === filter.name).length > 0;
+        default:
+          return true;
+      }
+    });
+  }, issues);
+}
+
 function updateIssueTransform({ updateIssue$ }) {
   return updateIssue$
     .map(issue => state => {
-      const { issues } = state;
-      const newIssues = merge(issues, issue);
+      const { issues, filters } = state;
+      const newIssues = filter(merge(issues, issue), filters);
       return assign({}, state, { issues: newIssues });
     });
 }
