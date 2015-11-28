@@ -1,5 +1,6 @@
 import Rx from 'rx';
 import assign from '../utils/assign';
+import newRequests from '../utils/new-requests';
 
 function indexOf(issues, issue) {
   const indexes = issues
@@ -47,22 +48,24 @@ function addChildren(issues) {
     });
 }
 
+function newRequest({ user, repo, token }) {
+  const url = `https://api.github.com/repos/${user}/${repo}/issues`;
+  const ua = { 'User-Agent': 'gh-tree' };
+  const auth = token ? { 'Authorization': `token ${token}` } : {};
+  const headers = assign({}, ua, auth);
+  return { method: 'GET', url, headers };
+}
+
 function fetchIssuesTransform({ fetchIssues$ }, { reposMaxLength }) {
   return fetchIssues$
     .map((_, i) => state => {
       const { settings, requests } = state;
       const repos = settings && settings.repos ? settings.repos : [];
-      const newRequests = requests.concat(repos.map(({ user, repo }, j) => {
-        const id = i * reposMaxLength + j;
-        const url = `https://api.github.com/repos/${user}/${repo}/issues`;
-        const ua = { 'User-Agent': 'gh-tree' };
-        const auth = settings.token ? {
-          'Authorization': `token ${settings.token}`
-        } : {};
-        const headers = assign({}, ua, auth);
-        return { id, method: 'GET', url, headers };
-      }));
-      return assign({}, state, { issues: [], requests: newRequests });
+      const token = settings.token;
+      const newAllRequests = repos.reduce((requests, { user, repo }) => {
+        return newRequests(requests, newRequest({ user, repo, token }));
+      }, requests);
+      return assign({}, state, { issues: [], requests: newAllRequests });
     });
 }
 
