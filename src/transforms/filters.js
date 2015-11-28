@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
 
 function addFilterTransform({ addFilter$ }) {
@@ -23,7 +23,7 @@ function removeFilterTransform({ removeFilter$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Rx.Observable.merge(
+  return Observable.merge(
     addFilterTransform(actions),
     removeFilterTransform(actions)
   );

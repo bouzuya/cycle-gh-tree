@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import Rx from 'rx';
+import { Observable } from 'rx';
 
 function makeHTTPDriver() {
   return function(request$) {
@@ -9,7 +9,7 @@ function makeHTTPDriver() {
     .map(request => {
       const { url, method, body, headers } = request;
       const promise = fetch(url, { method, body, headers });
-      const response$ = Rx.Observable.fromPromise(promise);
+      const response$ = Observable.fromPromise(promise);
       return response$.map(response => ({ request, response }));
     })
     .mergeAll()

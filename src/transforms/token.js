@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
 
 function saveTransform({ save$ }) {
@@ -25,7 +25,7 @@ function updateTransform({ update$ }) {
 
 export default function({ token }) {
   const actions = token;
-  return Rx.Observable
+  return Observable
     .merge(
       saveTransform(actions),
       updateTransform(actions)
