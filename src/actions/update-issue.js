@@ -2,9 +2,10 @@ import { Observable } from 'rx';
 
 function parseIssue(issue) {
   const { html_url, title, number, body } = issue;
+  const labels = issue.labels.map(label => label.name);
   const match = html_url.match(/^https:\/\/github\.com\/([^\/]+)\/([^\/]+)/);
   const [_, user, repo] = match;
-  return { url: html_url, title, number, body, user, repo };
+  return { url: html_url, title, number, body, user, repo, labels };
 }
 
 export default function({ HTTP }) {
