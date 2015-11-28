@@ -56,9 +56,9 @@ function newRequest({ user, repo, token }) {
   return { method: 'GET', url, headers };
 }
 
-function fetchIssuesTransform({ fetchIssues$ }, { reposMaxLength }) {
+function fetchIssuesTransform({ fetchIssues$ }) {
   return fetchIssues$
-    .map((_, i) => state => {
+    .map(() => state => {
       const { settings, requests } = state;
       const repos = settings && settings.repos ? settings.repos : [];
       const token = settings.token;
@@ -78,11 +78,11 @@ function updateIssueTransform({ updateIssue$ }) {
     });
 }
 
-export default function(actions, { reposMaxLength }) {
+export default function(actions) {
   // NOTE: no namespace
   return Rx.Observable
     .merge(
-      fetchIssuesTransform(actions, { reposMaxLength }),
+      fetchIssuesTransform(actions),
       updateIssueTransform(actions)
     );
 }

@@ -61,7 +61,7 @@ export default function(actions) {
         return state
       }),
     labels(actions),
-    issues(actions, { reposMaxLength }),
+    issues(actions),
     repos(actions, { reposMaxLength }),
     token(actions)
   );
