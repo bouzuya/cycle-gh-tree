@@ -1,7 +1,11 @@
 import { Observable } from 'rx';
 import assign from '../utils/assign';
-import newRequests from '../utils/new-requests';
 import transform from '../utils/transform';
+
+function newRequests(requests, request) {
+  const id = requests.length + 1;
+  return requests.concat([assign({}, request, { id })]);
+}
 
 function newIssueRequest({ user, repo, token }) {
   const url = `https://api.github.com/repos/${user}/${repo}/issues`;
