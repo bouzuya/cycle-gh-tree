@@ -66,9 +66,10 @@ function renderFiltersView(state) {
     h('button.fetch-labels', ['fetch']),
     h('ul.filter-labels', labels.map(label => {
       const checked = labelFilters.indexOf(label) >= 0;
+      const value = label;
       return h('li', [
         h('label.filter-label', [
-          h('input.value', { type: 'checkbox', checked }),
+          h('input.value', { type: 'checkbox', checked, value }),
           h('span.label', [label])
         ])
       ]);

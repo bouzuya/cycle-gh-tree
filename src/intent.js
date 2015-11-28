@@ -1,3 +1,4 @@
+import addFilter from './actions/add-filter';
 import fetchIssues from './actions/fetch-issues';
 import fetchLabels from './actions/fetch-labels';
 import loadSettings from './actions/load-settings';
@@ -11,6 +12,7 @@ import assign from './utils/assign';
 export default function(responses) {
   const actions = assign(
     {},
+    addFilter(responses),
     fetchIssues(responses),
     fetchLabels(responses),
     loadSettings(responses),
