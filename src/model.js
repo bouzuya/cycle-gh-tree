@@ -1,10 +1,15 @@
 import Rx from 'rx';
+import filters from './transforms/filters';
 import issues from './transforms/issues';
 import labels from './transforms/labels';
 import repos from './transforms/repos';
 import requests from './transforms/requests';
 import token from './transforms/token';
 import assign from './utils/assign';
+
+function initializeFilters() {
+  return { filters: [] };
+}
 
 function initializeLabels() {
   return { labels: [] };
@@ -40,13 +45,9 @@ export default function(actions) {
   const state = assign(
     {
       currentTab: "settings",
-      filters: [
-        // FIXME: dummy values
-        { type: 'label', name: 'bug' },
-        { type: 'label', name: 'ready' }
-      ],
       issues: []
     },
+    initializeFilters(),
     initializeLabels(),
     initializeRepos(),
     initializeRequests(),
@@ -64,6 +65,7 @@ export default function(actions) {
         state.currentTab = value;
         return state
       }),
+    filters(actions),
     issues(actions),
     labels(actions),
     repos(actions, { reposMaxLength }),
