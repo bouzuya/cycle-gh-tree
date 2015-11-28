@@ -1,6 +1,7 @@
 import { Observable } from 'rx';
 import assign from '../utils/assign';
 import newRequests from '../utils/new-requests';
+import transform from '../utils/transform';
 
 function newIssueRequest({ user, repo, token }) {
   const url = `https://api.github.com/repos/${user}/${repo}/issues`;
@@ -19,29 +20,25 @@ function newLabelRequest({ user, repo, token }) {
 }
 
 function fetchIssuesTransform({ fetchIssues$ }) {
-  return fetchIssues$
-    .map(() => state => {
-      const { settings, requests } = state;
-      const repos = settings && settings.repos ? settings.repos : [];
-      const token = settings.token;
-      const newAllRequests = repos.reduce((requests, { user, repo }) => {
-        return newRequests(requests, newIssueRequest({ user, repo, token }));
-      }, requests);
-      return assign({}, state, { requests: newAllRequests });
-    });
+  return fetchIssues$.map(transform(({ settings, requests }) => {
+    const repos = settings && settings.repos ? settings.repos : [];
+    const token = settings.token;
+    const newAllRequests = repos.reduce((requests, { user, repo }) => {
+      return newRequests(requests, newIssueRequest({ user, repo, token }));
+    }, requests);
+    return { requests: newAllRequests };
+  }));
 }
 
 function fetchLabelsTransform({ fetchLabels$ }) {
-  return fetchLabels$
-    .map(() => state => {
-      const { settings, requests } = state;
-      const repos = settings && settings.repos ? settings.repos : [];
-      const token = settings.token;
-      const newAllRequests = repos.reduce((requests, { user, repo }) => {
-        return newRequests(requests, newLabelRequest({ user, repo, token }));
-      }, requests);
-      return assign({}, state, { requests: newAllRequests });
-    });
+  return fetchLabels$.map(transform(({ settings, requests }) => {
+    const repos = settings && settings.repos ? settings.repos : [];
+    const token = settings.token;
+    const newAllRequests = repos.reduce((requests, { user, repo }) => {
+      return newRequests(requests, newLabelRequest({ user, repo, token }));
+    }, requests);
+    return { requests: newAllRequests };
+  }));
 }
 
 export default function labels(actions) {

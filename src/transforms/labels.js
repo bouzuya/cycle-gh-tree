@@ -1,20 +1,14 @@
 import { Observable } from 'rx';
-import assign from '../utils/assign';
+import transform from '../utils/transform';
 
 function fetchLabelsTransform({ fetchLabels$ }) {
-  return fetchLabels$
-    .map(() => state => assign({}, state, { labels: [] }));
+  return fetchLabels$.map(transform(() => ({ labels: [] })));
 }
 
 function updateLabelTransform({ updateLabel$ }) {
-  return updateLabel$
-    .map(label => state => {
-      const { labels } = state;
-      const index = labels.indexOf(label);
-      if (index >= 0) return state;
-      const newLabels = labels.concat([label]);
-      return assign({}, state, { labels: newLabels });
-    });
+  return updateLabel$.map(transform(({ labels }, label) => {
+    if (labels.indexOf(label) < 0) return { labels: labels.concat([label]) };
+  }));
 }
 
 export default function labels(actions) {
