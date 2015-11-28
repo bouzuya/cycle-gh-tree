@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import filters from './transforms/filters';
 import issues from './transforms/issues';
 import labels from './transforms/labels';
@@ -54,7 +54,7 @@ export default function(actions) {
     initializeToken()
   );
   const reposMaxLength = 10;
-  const actions$ = Rx.Observable.merge(
+  const actions$ = Observable.merge(
     loadSettings$
       .map(storage => state => {
         state.settings = storage;
@@ -72,7 +72,7 @@ export default function(actions) {
     requests(actions),
     token(actions)
   );
-  const state$ = Rx.Observable
+  const state$ = Observable
     .just(state)
     .merge(actions$)
     .scan((state, action) => action(state))

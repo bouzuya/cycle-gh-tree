@@ -1,5 +1,5 @@
 import { h } from '@cycle/dom';
-import Rx from 'rx';
+import { Observable } from 'rx';
 import reposSettingView from './views/repos-setting-view';
 
 function renderTokenForm(state) {
@@ -103,7 +103,7 @@ export default function(state$) {
     ])
   });
   const request$ = state$
-  .flatMap(({ requests }) => Rx.Observable.from(requests));
+  .flatMap(({ requests }) => Observable.from(requests));
   const data$ = state$
   .map(({ settings }) => settings);
   const requests = {

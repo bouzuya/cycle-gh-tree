@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
 import newRequests from '../utils/new-requests';
 
@@ -48,7 +48,7 @@ function fetchLabelsTransform({ fetchLabels$ }) {
 
 export default function labels(actions) {
   // NOTE: no namespace
-  return Rx.Observable.merge(
+  return Observable.merge(
     fetchIssuesTransform(actions),
     fetchLabelsTransform(actions)
   );

@@ -1,4 +1,4 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
 
 function exists(repos, user, repo) {
@@ -56,7 +56,7 @@ function updateUserTransform({ updateUser$ }) {
 
 export default function({ repos }, { reposMaxLength }) {
   const actions = repos;
-  return Rx.Observable
+  return Observable
     .merge(
       addRepoTransform(actions, { reposMaxLength }),
       removeRepoTransform(actions),
