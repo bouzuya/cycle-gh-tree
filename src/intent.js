@@ -2,6 +2,7 @@ import addFilter from './actions/add-filter';
 import fetchIssues from './actions/fetch-issues';
 import fetchLabels from './actions/fetch-labels';
 import loadSettings from './actions/load-settings';
+import removeFilter from './actions/remove-filter';
 import repo from './actions/repos/';
 import switchTab from './actions/switch-tab';
 import token from './actions/token/';
@@ -16,6 +17,7 @@ export default function(responses) {
     fetchIssues(responses),
     fetchLabels(responses),
     loadSettings(responses),
+    removeFilter(responses),
     repo(responses),
     switchTab(responses),
     token(responses),
