@@ -1,5 +1,10 @@
-import Rx from 'rx';
+import { Observable } from 'rx';
 import assign from '../utils/assign';
+
+function fetchLabelsTransform({ fetchLabels$ }) {
+  return fetchLabels$
+    .map(() => state => assign({}, state, { labels: [] }));
+}
 
 function updateLabelTransform({ updateLabel$ }) {
   return updateLabel$
@@ -14,5 +19,8 @@ function updateLabelTransform({ updateLabel$ }) {
 
 export default function labels(actions) {
   // NOTE: no namespace
-  return updateLabelTransform(actions);
+  return Observable.merge(
+    fetchLabelsTransform(actions),
+    updateLabelTransform(actions)
+  );
 }
