@@ -51,19 +51,22 @@ function renderSettingsView(state) {
 function renderIssuesView(state) {
   return h('section.issues', [
     h('h1', ['Issues']),
-    h('button.fetch-issues', ['fetch']),
+    h('button.fetch-issues', ['fetch issues']),
     renderIssueTree(state)
   ]);
 }
 
 function renderFiltersView(state) {
-  const { filters, labels } = state;
+  const { filters, labels, milestones } = state;
   const labelFilters = filters
     .filter(i => i.type === 'label')
     .map(i => i.name);
+  const milestoneFilters = filters
+    .filter(i => i.type === 'milestone')
+    .map(i => i.title);
   return h('section.filters', [
     h('h1', ['Filters']),
-    h('button.fetch-labels', ['fetch']),
+    h('button.fetch-labels', ['fetch labels']),
     h('ul.filter-labels', labels.map(label => {
       const checked = labelFilters.indexOf(label) >= 0;
       const value = label;
@@ -71,6 +74,17 @@ function renderFiltersView(state) {
         h('label.filter-label', [
           h('input.value', { type: 'checkbox', checked, value }),
           h('span.label', [label])
+        ])
+      ]);
+    })),
+    h('button.fetch-milestones', ['fetch milestones']),
+    h('ul.filter-milestones', milestones.map(milestone => {
+      const checked = milestoneFilters.indexOf(milestone) >= 0;
+      const value = milestone;
+      return h('li', [
+        h('label.filter-milestone', [
+          h('input.value', { type: 'checkbox', checked, value }),
+          h('span.label', [milestone])
         ])
       ]);
     }))
