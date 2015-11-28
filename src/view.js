@@ -57,13 +57,22 @@ function renderIssuesView(state) {
 }
 
 function renderFiltersView(state) {
-  const { labels } = state;
+  const { filters, labels } = state;
+  const labelFilters = filters
+    .filter(i => i.type === 'label')
+    .map(i => i.name);
   return h('section.filters', [
     h('h1', ['Filters']),
     h('button.fetch-labels', ['fetch']),
-    h('ul', labels.map(i => h('li', [
-      i
-    ])))
+    h('ul.filter-labels', labels.map(label => {
+      const checked = labelFilters.indexOf(label) >= 0;
+      return h('li', [
+        h('label.filter-label', [
+          h('input.value', { type: 'checkbox', checked }),
+          h('span.label', [label])
+        ])
+      ]);
+    }))
   ]);
 }
 

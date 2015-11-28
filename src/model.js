@@ -62,6 +62,11 @@ export default function(actions) {
   const state = assign(
     {
       currentTab: "settings",
+      filters: [
+        // FIXME: dummy values
+        { type: 'label', name: 'bug' },
+        { type: 'label', name: 'ready' }
+      ],
       issues: [],
       labels: [],
       requests: []
@@ -81,8 +86,8 @@ export default function(actions) {
         state.currentTab = value;
         return state
       }),
-    labels(actions),
     issues(actions),
+    labels(actions),
     repos(actions, { reposMaxLength }),
     token(actions)
   );
