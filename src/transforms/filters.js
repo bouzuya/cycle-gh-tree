@@ -1,24 +1,19 @@
 import { Observable } from 'rx';
-import assign from '../utils/assign';
+import transform from '../utils/transform';
 
 function addFilterTransform({ addFilter$ }) {
-  return addFilter$
-    .map(filter => state => {
-      const { filters } = state;
-      const newFilters = filters.concat([filter]);
-      return assign({}, state, { filters: newFilters });
-    });
+  return addFilter$.map(transform(({ filters }, filter) => {
+    return { filters: filters.concat([filter]) };
+  }));
 }
 
 function removeFilterTransform({ removeFilter$ }) {
-  return removeFilter$
-    .map(filter => state => {
-      const { filters } = state;
-      const newFilters = filters.filter(i => {
-        return i.type !== filter.type || i.name !== filter.name; 
-      });
-      return assign({}, state, { filters: newFilters });
+  return removeFilter$.map(transform(({ filters }, filter) => {
+    const newFilters = filters.filter(i => {
+      return i.type !== filter.type || i.name !== filter.name;
     });
+    return { filters: newFilters };
+  }));
 }
 
 export default function(actions) {
