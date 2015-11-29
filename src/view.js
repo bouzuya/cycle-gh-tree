@@ -58,6 +58,8 @@ function renderIssuesView(state) {
 
 function renderFiltersView(state) {
   const { assignees, filters, labels, milestones } = state;
+  const assigneeFilters = filters
+    .filter(i => i.type === 'assignee');
   const labelFilters = filters
     .filter(i => i.type === 'label')
     .map(i => i.name);
@@ -68,8 +70,8 @@ function renderFiltersView(state) {
     h('h1', ['Filters']),
     h('button.fetch-assignees', ['fetch assignees']),
     h('ul.filter-assignees', assignees.map(assignee => {
-      const checked = false;
-      const value = assignee.id;
+      const checked = assigneeFilters.some(i => i.id === assignee.id);
+      const value = JSON.stringify({ id: assignee.id, name: assignee.name });
       return h('li', [
         h('label.filter-assignee', [
           h('input.value', { type: 'checkbox', checked, value }),

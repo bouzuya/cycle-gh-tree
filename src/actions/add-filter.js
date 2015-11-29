@@ -1,5 +1,17 @@
 import { Observable } from 'rx';
 
+function addAssigneeFilter({ DOM }) {
+  return DOM
+    .select('.filter-assignee input[type=checkbox]')
+    .events('click')
+    .filter(e => e.target.checked)
+    .map(e => {
+      const type = 'assignee';
+      const { name, id } = JSON.parse(e.target.value);
+      return { type, name, id };
+    });
+}
+
 function addLabelFilter({ DOM }) {
   return DOM
     .select('.filter-label input[type=checkbox]')
@@ -26,6 +38,7 @@ function addMilestoneFilter({ DOM }) {
 
 export default function(responses) {
   const addFilter$ = Observable.merge(
+    addAssigneeFilter(responses),
     addLabelFilter(responses),
     addMilestoneFilter(responses)
   );
