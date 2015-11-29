@@ -1,4 +1,5 @@
 import { Observable } from 'rx';
+import assignees from './transforms/assignees';
 import filters from './transforms/filters';
 import issues from './transforms/issues';
 import labels from './transforms/labels';
@@ -7,6 +8,10 @@ import repos from './transforms/repos';
 import requests from './transforms/requests';
 import token from './transforms/token';
 import assign from './utils/assign';
+
+function initializeAssignees() {
+  return { assignees: [] };
+}
 
 function initializeFilters() {
   return { filters: [] };
@@ -52,6 +57,7 @@ export default function(actions) {
       currentTab: "settings",
       issues: []
     },
+    initializeAssignees(),
     initializeFilters(),
     initializeLabels(),
     initializeMilestones(),
@@ -61,6 +67,7 @@ export default function(actions) {
   );
   const reposMaxLength = 10;
   const actions$ = Observable.merge(
+    assignees(actions),
     loadSettings$
       .map(storage => state => {
         state.settings = storage;
