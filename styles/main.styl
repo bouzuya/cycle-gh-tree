@@ -6,14 +6,18 @@ $white-smoke = #f5f5f5
 $white = #fff
 
 body
+  margin 0
   color $black
   font-size 100%
   line-height 1.4
   font-family Inconsolata, monospace
 
 #app
-  width 960px
+  width 100%
   margin 0 auto
+
+h1
+  display none
 
 button
 input
@@ -44,18 +48,12 @@ nav
     background-color $light-gray
     flex auto
     text-align center
-    border 1px solid $black
     border-top-right-radius 4px
     border-top-left-radius 4px
-    &:first-child
-      border-right none
-    &:nth-child(2)
-      border-right none
     &:hover
       transition background-color 0.8s
       background-color $white-smoke
     &.active
-      box-shadow none
       border-bottom none
       background-color $white
       cursor default
@@ -69,9 +67,6 @@ nav
 section.settings
 section.issues
 section.filters
-  border-right 1px solid $black
-  border-bottom 1px solid $black
-  border-left 1px solid $black
   padding 16px
   h1
     margin 0
