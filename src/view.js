@@ -57,7 +57,7 @@ function renderIssuesView(state) {
 }
 
 function renderFiltersView(state) {
-  const { filters, labels, milestones } = state;
+  const { assignees, filters, labels, milestones } = state;
   const labelFilters = filters
     .filter(i => i.type === 'label')
     .map(i => i.name);
@@ -66,6 +66,17 @@ function renderFiltersView(state) {
     .map(i => i.title);
   return h('section.filters', [
     h('h1', ['Filters']),
+    h('button.fetch-assignees', ['fetch assignees']),
+    h('ul.filter-assignees', assignees.map(assignee => {
+      const checked = false;
+      const value = assignee.id;
+      return h('li', [
+        h('label.filter-assignee', [
+          h('input.value', { type: 'checkbox', checked, value }),
+          h('span.label', [assignee.name])
+        ])
+      ]);
+    })),
     h('button.fetch-labels', ['fetch labels']),
     h('ul.filter-labels', labels.map(label => {
       const checked = labelFilters.indexOf(label) >= 0;
