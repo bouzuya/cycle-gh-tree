@@ -1,5 +1,5 @@
 import { h } from '@cycle/dom';
-import issuesView from '../views/issues-view';
+import filtersAndIssuesView from '../views/filters-and-issues-view';
 import settingsView from '../views/settings-view';
 
 function tabView(state) {
@@ -7,7 +7,7 @@ function tabView(state) {
   if (currentTab === 'settings') {
     return settingsView(state);
   } else {
-    return issuesView(state);
+    return filtersAndIssuesView(state);
   }
 }
 

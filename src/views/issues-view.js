@@ -1,30 +1,24 @@
 import { h } from '@cycle/dom';
 import filtersView from '../views/filters-view';
 
-function renderIssueTree({ issues }) {
-  return h('ul', issues.map(({ user, repo, url, title, number, children }) => {
-    return h('li', [
-      h('a', { href: url }, [`${user}/${repo}#${number}`]),
-      ' ',
-      title,
-      children.length === 0 ? null : h('ul', children.map(i => {
-        const { user, repo, url, title, number } = i;
-        return h('li', [
-          h('a', { href: url }, [`${user}/${repo}#${number}`]),
-          ' ',
-          title
-        ]);
-      }))
-    ]);
-  }));
-}
-
-export default function(state) {
+export default function({ issues }) {
   return h('section.issues', [
-    filtersView(state),
     h('h1', ['Issues']),
     h('button.fetch-issues', ['fetch issues']),
-    renderIssueTree(state)
+    h('ul', issues.map(({ user, repo, url, title, number, children }) => {
+      return h('li', [
+        h('a', { href: url }, [`${user}/${repo}#${number}`]),
+        ' ',
+        title,
+        children.length === 0 ? null : h('ul', children.map(i => {
+          const { user, repo, url, title, number } = i;
+          return h('li', [
+            h('a', { href: url }, [`${user}/${repo}#${number}`]),
+            ' ',
+            title
+          ]);
+        }))
+      ]);
+    }))
   ]);
 }
-
