@@ -1,6 +1,7 @@
 import { h } from '@cycle/dom';
 import { Observable } from 'rx';
 import reposSettingView from './views/repos-setting-view';
+import issuesView from './views/issues-view';
 
 function renderTokenForm(state) {
   const { settings, token } = state;
@@ -18,25 +19,6 @@ function renderTokenForm(state) {
   ]);
 }
 
-function renderIssueTree(state) {
-  const { issues } = state;
-  return h('ul', issues.map(({ user, repo, url, title, number, children }) => {
-    return h('li', [
-      h('a', { href: url }, [`${user}/${repo}#${number}`]),
-      ' ',
-      title,
-      children.length === 0 ? null : h('ul', children.map(i => {
-        const { user, repo, url, title, number } = i;
-        return h('li', [
-          h('a', { href: url }, [`${user}/${repo}#${number}`]),
-          ' ',
-          title
-        ]);
-      }))
-    ]);
-  }));
-}
-
 function renderSettingsView(state) {
   return h('section.settings', [
     h('h1', ['Settings']),
@@ -45,14 +27,6 @@ function renderSettingsView(state) {
       renderTokenForm(state)
     ]),
     reposSettingView(state)
-  ]);
-}
-
-function renderIssuesView(state) {
-  return h('section.issues', [
-    h('h1', ['Issues']),
-    h('button.fetch-issues', ['fetch issues']),
-    renderIssueTree(state)
   ]);
 }
 
@@ -108,7 +82,7 @@ function renderTabView(state) {
   const { currentTab } = state;
   if (currentTab === 'settings') return renderSettingsView(state);
   if (currentTab === 'filters') return renderFiltersView(state);
-  return renderIssuesView(state);
+  return issuesView(state);
 }
 
 export default function(state$) {
