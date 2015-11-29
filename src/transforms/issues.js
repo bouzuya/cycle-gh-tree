@@ -49,6 +49,9 @@ function addChildren(issues) {
 }
 
 function filter(issues, filters) {
+  const assignees = filters
+    .filter(i => i.type === 'assignee')
+    .map(i => i.id);
   const labels = filters
     .filter(i => i.type === 'label')
     .map(i => i.name);
@@ -56,6 +59,10 @@ function filter(issues, filters) {
     .filter(i => i.type === 'milestone')
     .map(i => i.name);
   return issues
+    .filter(issue => {
+      if (assignees.length === 0) return true;
+      return assignees.some(i => issue.assignee && i === issue.assignee.id);
+    })
     .filter(issue => {
       if (labels.length === 0) return true;
       return labels.some(i => issue.labels.some(j => i === j));
