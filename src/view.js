@@ -1,34 +1,7 @@
 import { h } from '@cycle/dom';
 import { Observable } from 'rx';
-import reposSettingView from './views/repos-setting-view';
 import issuesView from './views/issues-view';
-
-function renderTokenForm(state) {
-  const { settings, token } = state;
-  const currentToken = settings && settings.token ? settings.token : '';
-  return h('div', [
-    h('input.token', { value: token.value }),
-    h('button.save-token', ['save token']),
-    h('span.token', [
-      currentToken.replace(/^(.*)(.{4})$/, (_, p1, p2) => {
-        const masked = new Array(p1.length + 1).join('*');
-        const opened = p2;
-        return masked + opened;
-      })
-    ])
-  ]);
-}
-
-function renderSettingsView(state) {
-  return h('section.settings', [
-    h('h1', ['Settings']),
-    h('div', [
-      h('h1', ['Token']),
-      renderTokenForm(state)
-    ]),
-    reposSettingView(state)
-  ]);
-}
+import settingsView from './views/settings-view';
 
 function renderFiltersView(state) {
   const { assignees, filters, labels, milestones } = state;
@@ -80,7 +53,7 @@ function renderFiltersView(state) {
 
 function renderTabView(state) {
   const { currentTab } = state;
-  if (currentTab === 'settings') return renderSettingsView(state);
+  if (currentTab === 'settings') return settingsView(state);
   if (currentTab === 'filters') return renderFiltersView(state);
   return issuesView(state);
 }
