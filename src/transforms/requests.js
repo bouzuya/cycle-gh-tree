@@ -7,6 +7,14 @@ function newRequests(requests, request) {
   return requests.concat([assign({}, request, { id })]);
 }
 
+function newAssigneeRequest({ user, repo, token }) {
+  const url = `https://api.github.com/repos/${user}/${repo}/assignees`;
+  const ua = { 'User-Agent': 'gh-tree' };
+  const auth = token ? { 'Authorization': `token ${token}` } : {};
+  const headers = assign({}, ua, auth);
+  return { method: 'GET', url, headers };
+}
+
 function newIssueRequest({ user, repo, token }) {
   const url = `https://api.github.com/repos/${user}/${repo}/issues`;
   const ua = { 'User-Agent': 'gh-tree' };
@@ -29,6 +37,17 @@ function newMilestoneRequest({ user, repo, token }) {
   const auth = token ? { 'Authorization': `token ${token}` } : {};
   const headers = assign({}, ua, auth);
   return { method: 'GET', url, headers };
+}
+
+function fetchAssigneesTransform({ fetchAssignees$ }) {
+  return fetchAssignees$.map(transform(({ settings, requests }) => {
+    const repos = settings && settings.repos ? settings.repos : [];
+    const token = settings.token;
+    const newAllRequests = repos.reduce((requests, { user, repo }) => {
+      return newRequests(requests, newAssigneeRequest({ user, repo, token }));
+    }, requests);
+    return { requests: newAllRequests };
+  }));
 }
 
 function fetchIssuesTransform({ fetchIssues$ }) {
@@ -67,6 +86,7 @@ function fetchMilestonesTransform({ fetchMilestones$ }) {
 export default function labels(actions) {
   // NOTE: no namespace
   return Observable.merge(
+    fetchAssigneesTransform(actions),
     fetchIssuesTransform(actions),
     fetchLabelsTransform(actions),
     fetchMilestonesTransform(actions)
