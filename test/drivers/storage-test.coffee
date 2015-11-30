@@ -1,6 +1,6 @@
 assert = require 'power-assert'
 sinon = require 'sinon'
-Rx = require 'rx'
+{ Observable } = require 'rx'
 { Storage } = require '../../src/utils/storage'
 { makeStorageDriver } = require '../../src/drivers/storage'
 
@@ -16,10 +16,12 @@ describe 'drivers/storage', ->
   context 'get initial state', ->
     it 'works', (done) ->
       data = [null]
-      data$ = Rx.Observable.from data
+      data$ = Observable.from data
       driver = makeStorageDriver()
       response$ = driver data$
-      response$.toArray().subscribe ([d1, d2]) =>
+      response$.toArray().subscribe (a) =>
+        assert a.length is 1
+        [d1] = a
         assert.deepEqual d1, {}
         assert @getItem.callCount is 0
         assert @setItem.callCount is 0
@@ -30,10 +32,12 @@ describe 'drivers/storage', ->
   context 'get initial state (no data)', ->
     it 'works', (done) ->
       data = [null]
-      data$ = Rx.Observable.from data
+      data$ = Observable.from data
       driver = makeStorageDriver()
       response$ = driver data$
-      response$.toArray().subscribe ([d1, d2]) =>
+      response$.toArray().subscribe (a) =>
+        [d1] = a
+        assert a.length is 1
         assert.deepEqual d1, {}
         assert @getItem.callCount is 0
         assert @setItem.callCount is 0
@@ -44,10 +48,12 @@ describe 'drivers/storage', ->
   context 'get initial state (data exists)', ->
     it 'works', (done) ->
       data = [null]
-      data$ = Rx.Observable.from data
+      data$ = Observable.from data
       driver = makeStorageDriver(baz: 123)
       response$ = driver data$
-      response$.toArray().subscribe ([d1]) =>
+      response$.toArray().subscribe (a) =>
+        [d1] = a
+        assert a.length is 1
         assert.deepEqual d1, baz: 123
         assert @getItem.callCount is 1
         assert.deepEqual @getItem.getCall(0).args, ['baz']
@@ -65,19 +71,13 @@ describe 'drivers/storage', ->
       ,
         baz: 123
       ]
-      data$ = Rx.Observable.from data
+      data$ = Observable.from data
       driver = makeStorageDriver()
       response$ = driver data$
       response$.toArray().subscribe (a) =>
-        assert a.length is 3
-        [d1, d2, d3] = a
-        assert.deepEqual d1, {}
-        assert.deepEqual d2, foo: 'bar'
-        assert.deepEqual d3, baz: 123
-        assert @getItem.callCount is 0
-        assert @setItem.callCount is 2
-        assert.deepEqual @setItem.getCall(0).args, ['foo', '"bar"']
-        assert.deepEqual @setItem.getCall(1).args, ['baz', '123']
+        [d1] = a
+        assert a.length is 1 # latest only
+        assert.deepEqual d1, baz: 123
         done()
       , done
       null
@@ -89,12 +89,12 @@ describe 'drivers/storage', ->
       ,
         foo: 'bar'
       ]
-      data$ = Rx.Observable.from data
+      data$ = Observable.from data
       driver = makeStorageDriver()
       response$ = driver data$
       response$.toArray().subscribe (a) =>
-        assert a.length is 1
         [d1] = a
+        assert a.length is 1
         assert.deepEqual d1, foo: 'bar'
         assert @getItem.callCount is 0
         assert @setItem.callCount is 1
