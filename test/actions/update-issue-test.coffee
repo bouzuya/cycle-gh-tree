@@ -9,22 +9,36 @@ describe 'actions/update-issue', ->
       title: 'title 1-1'
       number: 1
       body: 'body 1-1'
+      assignee: null
+      labels: []
     ,
       html_url: 'https://github.com/bouzuya/blog.bouzuya.net/issues/2'
       title: 'title 1-2'
       number: 2
       body: 'body 1-2'
+      assignee:
+        avatar_url: 'https://github.com/images/error/octocat_happy.gif'
+        login: 'octocat'
+      labels: []
     ]
     issues2 = [
       html_url: 'https://github.com/bouzuya/bouzuya.net/issues/1'
       title: 'title 2-1'
       number: 1
       body: 'body 2-1'
+      assignee:
+        avatar_url: 'https://github.com/images/error/octocat_happy.gif'
+        login: 'octocat'
+      labels: []
     ,
       html_url: 'https://github.com/bouzuya/bouzuya.net/issues/2'
       title: 'title 2-2'
       number: 2
       body: 'body 2-2'
+      assignee:
+        avatar_url: 'https://github.com/images/error/octocat_happy.gif'
+        login: 'octocat'
+      labels: []
     ]
     HTTP = Rx.Observable.from [
       request:
