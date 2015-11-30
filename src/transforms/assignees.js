@@ -7,7 +7,7 @@ function fetchAssigneesTransform({ fetchAssignees$ }) {
 
 function updateAssigneeTransform({ updateAssignee$ }) {
   return updateAssignee$.map(transform(({ assignees }, assignee) => {
-    if (assignees.indexOf(assignee) < 0) {
+    if (!assignees.some(i => i.name === assignee.name)) {
       return { assignees: assignees.concat([assignee]) };
     }
   }));
