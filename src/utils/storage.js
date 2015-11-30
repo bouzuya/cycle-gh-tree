@@ -12,7 +12,7 @@ import assign from '../utils/assign';
 export class Storage {
   constructor(initialState = {}) {
     this.keys = Object.keys(initialState);
-    this.storage = assign({}, { initialState });
+    this.storage = assign({}, initialState);
   }
 
   get length() {
