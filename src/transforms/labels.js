@@ -13,8 +13,8 @@ function updateLabelTransform({ updateLabel$ }) {
 
 export default function labels(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     fetchLabelsTransform(actions),
     updateLabelTransform(actions)
-  );
+  ).mergeAll();
 }

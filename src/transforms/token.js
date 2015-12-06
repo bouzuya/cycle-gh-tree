@@ -18,9 +18,8 @@ function updateTransform({ update$ }) {
 
 export default function({ token }) {
   const actions = token;
-  return Observable
-    .merge(
-      saveTransform(actions),
-      updateTransform(actions)
-    );
+  return Observable.of(
+    saveTransform(actions),
+    updateTransform(actions)
+  ).mergeAll();
 }

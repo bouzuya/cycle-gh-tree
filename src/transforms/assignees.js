@@ -15,8 +15,8 @@ function updateAssigneeTransform({ updateAssignee$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     fetchAssigneesTransform(actions),
     updateAssigneeTransform(actions)
-  );
+  ).mergeAll();
 }

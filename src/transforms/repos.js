@@ -48,11 +48,10 @@ function updateUserTransform({ updateUser$ }) {
 
 export default function({ repos }, { reposMaxLength }) {
   const actions = repos;
-  return Observable
-    .merge(
-      addRepoTransform(actions, { reposMaxLength }),
-      removeRepoTransform(actions),
-      updateRepoTransform(actions),
-      updateUserTransform(actions)
-    );
+  return Observable.of(
+    addRepoTransform(actions, { reposMaxLength }),
+    removeRepoTransform(actions),
+    updateRepoTransform(actions),
+    updateUserTransform(actions)
+  ).mergeAll();
 }

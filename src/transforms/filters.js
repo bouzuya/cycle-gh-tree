@@ -30,10 +30,10 @@ function removeFilterTransform({ removeFilter$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     addFilterTransform(actions),
     fetchLabelsTransform(actions),
     fetchMilestonesTransform(actions),
     removeFilterTransform(actions)
-  );
+  ).mergeAll();
 }

@@ -15,8 +15,8 @@ function updateMilestoneTransform({ updateMilestone$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     fetchMilestonesTransform(actions),
     updateMilestoneTransform(actions)
-  );
+  ).mergeAll();
 }

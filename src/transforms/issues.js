@@ -86,8 +86,8 @@ function updateIssueTransform({ updateIssue$ }) {
 
 export default function(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     fetchIssuesTransform(actions),
     updateIssueTransform(actions)
-  );
+  ).mergeAll();
 }

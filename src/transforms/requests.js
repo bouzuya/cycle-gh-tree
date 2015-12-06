@@ -85,10 +85,10 @@ function fetchMilestonesTransform({ fetchMilestones$ }) {
 
 export default function labels(actions) {
   // NOTE: no namespace
-  return Observable.merge(
+  return Observable.of(
     fetchAssigneesTransform(actions),
     fetchIssuesTransform(actions),
     fetchLabelsTransform(actions),
     fetchMilestonesTransform(actions)
-  );
+  ).mergeAll();
 }

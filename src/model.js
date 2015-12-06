@@ -66,7 +66,7 @@ export default function(actions) {
     initializeToken()
   );
   const reposMaxLength = 10;
-  const actions$ = Observable.merge(
+  const actions$ = Observable.of(
     assignees(actions),
     loadSettings$
       .map(storage => state => {
@@ -85,7 +85,7 @@ export default function(actions) {
     repos(actions, { reposMaxLength }),
     requests(actions),
     token(actions)
-  );
+  ).mergeAll();
   const state$ = Observable
     .just(state)
     .merge(actions$)

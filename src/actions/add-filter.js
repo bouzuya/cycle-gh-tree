@@ -37,10 +37,10 @@ function addMilestoneFilter({ DOM }) {
 }
 
 export default function(responses) {
-  const addFilter$ = Observable.merge(
+  const addFilter$ = Observable.of(
     addAssigneeFilter(responses),
     addLabelFilter(responses),
     addMilestoneFilter(responses)
-  );
+  ).mergeAll();
   return { addFilter$ };
 }
