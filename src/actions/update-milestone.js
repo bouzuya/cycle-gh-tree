@@ -11,7 +11,9 @@ export default function({ HTTP }) {
       const pattern = '^https://api.github.com/repos/[^/]+/[^/]+/milestones$';
       return request.url.match(new RegExp(pattern));
     })
-    .flatMap(({ response }) => Observable.fromPromise(response.json()))
-    .flatMap(json => Observable.from(json.map(parseMilestone)));
+    .map(({ response }) => Observable.fromPromise(response.json()))
+    .mergeAll()
+    .map(json => Observable.from(json.map(parseMilestone)))
+    .mergeAll();
   return { updateMilestone$ };
 }

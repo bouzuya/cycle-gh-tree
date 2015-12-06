@@ -16,7 +16,9 @@ export default function({ HTTP }) {
     const pattern = '^https://api.github.com/repos/[^/]+/[^/]+/issues$';
     return request.url.match(new RegExp(pattern));
   })
-  .flatMap(({ response }) => Observable.fromPromise(response.json()))
-  .flatMap(json => Observable.from(json.map(parseIssue)));
+  .map(({ response }) => Observable.fromPromise(response.json()))
+  .mergeAll()
+  .map(json => Observable.from(json.map(parseIssue)))
+  .mergeAll();
   return { updateIssue$ };
 }
